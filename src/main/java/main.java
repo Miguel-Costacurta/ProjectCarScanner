@@ -1,6 +1,7 @@
 import com.fazecast.jSerialComm.SerialPort;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class main {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -16,15 +17,36 @@ public class main {
         if (porta.openPort()) {
             System.out.println("Porta aberta com sucesso!");
 
-            // Envia ATZ (reset do ELM327)
-            String comando = "ATZ\r";
-            porta.getOutputStream().write(comando.getBytes());
-            porta.getOutputStream().flush();
+            String comando = "010C\r";
+            int contador = 0;
+            int rpm = 0;
 
-            // Espera a resposta
+            Scanner scanner = new Scanner(System.in);
+
+            while(contador <= 9){
+
+                porta.getOutputStream().write(comando.getBytes());
+                porta.getOutputStream().flush();
+                byte[] buffer = new byte[256];
+                int bytes = porta.getInputStream().read(buffer);
+                String resposta = new String(buffer, 0, bytes);
+                System.out.println("RPM: " + resposta);
+
+                String[] partes = resposta.split(" ");
+
+
+                rpm = ((Integer.parseInt(partes[2].trim(),16) * 256) + Integer.parseInt(partes[3].trim(),16))/4;
+
+                System.out.println("RPM calculado: " + rpm);
+
+                contador++;
+            }
+
+
+
             Thread.sleep(1500);
 
-            // Lê o que veio
+
             byte[] buffer = new byte[256];
             int bytes = porta.getInputStream().read(buffer);
             String resposta = new String(buffer, 0, bytes);
