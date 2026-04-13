@@ -1,14 +1,20 @@
+import javafx.application.Application;
 import obd.connection.ObdConnection;
 import obd.sensors.FuelTrim;
 import obd.sensors.RPM;
 import obd.sensors.TPS;
 import obd.sensors.Tensao;
+import obd.ui.MainWindow;
 
 import java.io.IOException;
 
 public class main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        ObdConnection obdConnection = new ObdConnection();
+
+            Application.launch(MainWindow.class, args);
+
+
+        /*ObdConnection obdConnection = new ObdConnection();
         RPM mostrarRPM = new RPM(obdConnection);
         TPS mostrarTPS = new TPS(obdConnection);
         Tensao mostrarTensao = new Tensao(obdConnection);
@@ -39,5 +45,5 @@ public class main {
         }
 
         obdConnection.closeConnection();
-    }
-}
+    }*/
+}}

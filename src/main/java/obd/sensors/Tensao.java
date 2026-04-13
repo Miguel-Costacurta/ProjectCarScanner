@@ -14,7 +14,7 @@ public class Tensao extends Sensor{
     public double traduzirResposta() throws IOException, InterruptedException {
         String[] parts = respostaObd().split(" ");
 
-        tensao = (double) Integer.parseInt(parts[2].trim(), 16) /10;
+        tensao = (double) (Integer.parseInt(parts[2].trim(), 16) * 256 + Integer.parseInt(parts[3].trim(), 16)) / 1000.0;
 
         return tensao;
     }

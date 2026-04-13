@@ -17,7 +17,16 @@ public abstract class Sensor{
     public abstract double traduzirResposta() throws IOException, InterruptedException;
 
     public String respostaObd() throws IOException, InterruptedException {
-        resposta = obdConnection.enviarComando(codigo);
+        boolean valid = false;
+        while(!valid){
+            resposta = obdConnection.enviarComando(codigo);
+            if(!resposta.contains("SEARCHING") && !resposta.contains("ERROR") && !resposta.contains("NO DATA")){
+                valid = true;
+            } else {
+                Thread.sleep(550);
+            }
+        }
+
         System.out.println("Resposta OBDII: " + resposta);
 
         return resposta;
