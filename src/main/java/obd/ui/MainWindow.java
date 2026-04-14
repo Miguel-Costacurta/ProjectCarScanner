@@ -80,44 +80,19 @@ public class MainWindow extends Application {
                     statusConexao.setText("● nenhum dispositivo encontrado");
                     statusConexao.setStyle("-fx-font-size: 12px; -fx-text-fill: #E24B4A;");
                 });
-                return; // para aqui se não conectou
+                return;
             }
 
             Platform.runLater(() ->
                     statusConexao.setText("● conectado — " + obdConnection.getPortName())
             );
 
-            // só depois começa a ler
-            while (true) {
-                try {
-                    double rpm = mostrarRPM.traduzirResposta();
-                    double tensao = mostrarTensao.traduzirResposta();
-                    double tps = mostrarTPS.traduzirResposta();
-                    double lambda = mostrarLambda.traduzirResposta();
-
-                    Platform.runLater(() -> {
-                        try {
-                            System.out.println("RPM bruto: " + mostrarRPM.respostaObd());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        cardRpm.valor.setText(String.format("%.0f", rpm));
-                        cardRpm.barra.setPrefWidth(cardRpm.card.getWidth() * (rpm / cardRpm.valorMax));
-                        cardTensao.valor.setText(String.format("%.2f", tensao));
-                        cardTensao.barra.setPrefWidth(cardTensao.card.getWidth() * (tensao / cardTensao.valorMax));
-                        cardTps.valor.setText(String.format("%.1f", tps));
-                        cardTps.barra.setPrefWidth(cardTps.card.getWidth() * (tps / cardTps.valorMax));
-                        cardLambda.valor.setText(String.format("%.2f", lambda));
-                        cardLambda.barra.setPrefWidth(cardLambda.card.getWidth() * (lambda / cardLambda.valorMax));
-
-                    });
-                    Thread.sleep(500);
-                } catch (Exception e) {
-                    System.out.println("Erro: " + e.getMessage());
-                }
-            }
+            LeituraObd leituraObd = new LeituraObd(obdConnection,mostrarTPS, mostrarRPM,mostrarLambda,mostrarTensao, (rpm) ->{
+                Platform.runLater(()->{
+                    cardRpm.valor.setText(String.format("%.0f", rpm));
+                });
+            });
+            leituraObd.getResponse();
         }).start();
     }
 }
