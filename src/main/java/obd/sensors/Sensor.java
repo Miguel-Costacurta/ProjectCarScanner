@@ -20,7 +20,10 @@ public abstract class Sensor{
         boolean valid = false;
         while(!valid){
             resposta = obdConnection.enviarComando(codigo);
-            if(!resposta.contains("SEARCHING") && !resposta.contains("ERROR") && !resposta.contains("NO DATA")){
+            if(!resposta.contains("SEARCHING") &&
+                    !resposta.contains("ERROR") &&
+                    !resposta.contains("NO DATA") &&
+                    !resposta.startsWith("7F")){
                 valid = true;
             } else {
                 Thread.sleep(550);
@@ -28,7 +31,7 @@ public abstract class Sensor{
         }
 
         System.out.println("Resposta OBDII: " + resposta);
-
+        resposta = resposta.replace(">", "").trim();
         return resposta;
     }
 
