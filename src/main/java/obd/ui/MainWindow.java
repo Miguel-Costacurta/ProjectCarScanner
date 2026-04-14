@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -23,68 +24,54 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage stage) {
 
-         ObdConnection obdConnection = new ObdConnection();
+        ObdConnection obdConnection = new ObdConnection();
 
-         RPM mostrarRPM = new RPM(obdConnection);
-         Tensao mostrarTensao = new Tensao(obdConnection);
-         TPS mostrarTPS = new TPS(obdConnection);
-         FuelTrim mostrarLambda = new FuelTrim(obdConnection,1);
+        RPM mostrarRPM = new RPM(obdConnection);
+        Tensao mostrarTensao = new Tensao(obdConnection);
+        TPS mostrarTPS = new TPS(obdConnection);
+        FuelTrim mostrarLambda = new FuelTrim(obdConnection,1);
 
-        obdConnection.openConnection();
+        Label statusConexao = new Label();
+        statusConexao.setStyle("-fx-font-size: 12px; -fx-text-fill: #1D9E75;");
+
+        Pane divisor = new Pane();
+        divisor.setStyle("-fx-background-color: #1a1a1a;");
+        divisor.setPrefHeight(1);
+        divisor.setMaxWidth(Double.MAX_VALUE);
+
+        if(!obdConnection.detectarEConectar()){
+            statusConexao.setText("● nenhum dispositivo encontrado");
+            statusConexao.setStyle("-fx-font-size: 12px; -fx-text-fill: #E24B4A;");
+            return;
+        }
         Label titulo = new Label("ProjectCarScanner");
 
-        titulo.setStyle("-fx-font-size: 20px;");
+        titulo.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
 
-        VBox layout = new VBox(10);
-        layout.setStyle("-fx-background-color: #f4f4f4;");
-        //layout.getChildren().addAll(titulo);
+        VBox layout = new VBox(16);
+        layout.setStyle("-fx-background-color: #121212; -fx-padding: 24;");
 
-        VBox cardRpm = new VBox(4);
+        SensorCard cardRpm = new SensorCard("RPM", "rpm", 6800);
+        SensorCard cardTps = new SensorCard("TPS", "%", 100);
+        SensorCard cardTensao = new SensorCard("Tensão", "V", 14.5);
+        SensorCard cardLambda = new SensorCard("Lambda", "λ", 1.99);
 
-        Label labelRpm = new Label("RPM");
-        labelRpm.setStyle("-fx-font-size: 12px; -fx-text-fill: #888;");
-        Label valorRpm = new Label("--");
-        valorRpm.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
-
-        cardRpm.getChildren().addAll(labelRpm, valorRpm);
-
-        VBox cardTps = new VBox(4);
-
-        Label labelTps = new Label("TPS");
-        labelTps.setStyle("-fx-font-size: 12px; -fx-text-fill: #888;");
-        Label valorTps = new Label("--");
-        valorTps.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
-
-        cardTps.getChildren().addAll(labelTps, valorTps);
-
-        VBox cardTensao = new VBox(4);
-
-        Label labelTensao = new Label("TENSÃO");
-        labelTensao.setStyle("-fx-font-size: 12px; -fx-text-fill: #888;");
-        Label valorTensao = new Label("--");
-        valorTensao.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
-
-        cardTensao.getChildren().addAll(labelTensao, valorTensao);
-
-        VBox cardLambda = new VBox(4);
-
-        Label labelLamba = new Label("Lambda");
-        labelLamba.setStyle("-fx-font-size: 12px; -fx-text-fill: #888;");
-        Label valorLambda = new Label("--");
-        valorLambda.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
-
-        cardLambda.getChildren().addAll(labelLamba, valorLambda);
-
-        String estiloCard = "-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8;";
-        cardRpm.setStyle(estiloCard);
-        cardTps.setStyle(estiloCard);
-        cardTensao.setStyle(estiloCard);
-        cardLambda.setStyle(estiloCard);
+        cardRpm.valor.setText("1500");
+        cardLambda.valor.setText("1.00");
+        cardTensao.valor.setText("13.8v");
+        cardTps.valor.setText("11.8%");
 
         HBox cardsRow = new HBox(12); // 12 = espaço entre cards
-        cardsRow.getChildren().addAll(cardRpm, cardTps, cardTensao, cardLambda);
 
-        layout.getChildren().addAll(titulo, cardsRow); // adiciona tudo junto
+        cardsRow.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(cardRpm.card, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(cardTps.card, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(cardTensao.card, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(cardLambda.card, javafx.scene.layout.Priority.ALWAYS);
+
+        cardsRow.getChildren().addAll(cardRpm.card, cardTps.card, cardTensao.card, cardLambda.card);
+
+        layout.getChildren().addAll(statusConexao,titulo,divisor, cardsRow); // adiciona tudo junto
 
         Scene scene = new Scene(layout, 800, 600);
         stage.setScene(scene);
@@ -100,20 +87,32 @@ public class MainWindow extends Application {
                     double lambda =  mostrarLambda.traduzirResposta();
 
                     Platform.runLater(() -> {
-                        valorRpm.setText(String.format("%.0f", rpm));
-                        valorTensao.setText(String.format("%.2f", tensao));
-                        valorTps.setText(String.format("%.1f", tps));
-                        valorLambda.setText(String.format("%.2f", lambda));
+                        cardRpm.valor.setText(String.format("%.0f", rpm));
+                        cardRpm.barra.setPrefWidth(
+                                cardRpm.card.getWidth() * (rpm / cardRpm.valorMax));
+
+                        cardTensao.valor.setText(String.format("%.2f", tensao));
+                        cardTensao.barra.setPrefWidth(
+                                cardTensao.card.getWidth() * (tensao / cardTensao.valorMax));
+
+                        cardTps.valor.setText(String.format("%.1f", tps));
+                        cardTps.barra.setPrefWidth(
+                                cardTps.card.getWidth() * (tps / cardTps.valorMax));
+
+                        cardLambda.valor.setText(String.format("%.2f", lambda));
+                        cardLambda.barra.setPrefWidth(
+                                cardLambda.card.getWidth() * (lambda / cardLambda.valorMax));
+
                         }
                     );
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                } catch (Exception e){
+                    System.out.println("Erro na leitura: " + e.getMessage());
                 }
             }
         }
         ).start();
 
     }
+
+
 }
