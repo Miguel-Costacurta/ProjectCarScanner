@@ -29,7 +29,7 @@ public class MainWindow extends Application {
         RPM mostrarRPM = new RPM(obdConnection);
         Tensao mostrarTensao = new Tensao(obdConnection);
         TPS mostrarTPS = new TPS(obdConnection);
-        FuelTrim mostrarLambda = new FuelTrim(obdConnection,1);
+        FuelTrim mostrarLambda = new FuelTrim(obdConnection, 1);
 
         Label statusConexao = new Label();
         statusConexao.setStyle("-fx-font-size: 12px; -fx-text-fill: #1D9E75;");
@@ -39,11 +39,6 @@ public class MainWindow extends Application {
         divisor.setPrefHeight(1);
         divisor.setMaxWidth(Double.MAX_VALUE);
 
-        if(!obdConnection.detectarEConectar()){
-            statusConexao.setText("● nenhum dispositivo encontrado");
-            statusConexao.setStyle("-fx-font-size: 12px; -fx-text-fill: #E24B4A;");
-            return;
-        }
         Label titulo = new Label("ProjectCarScanner");
 
         titulo.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
@@ -71,48 +66,49 @@ public class MainWindow extends Application {
 
         cardsRow.getChildren().addAll(cardRpm.card, cardTps.card, cardTensao.card, cardLambda.card);
 
-        layout.getChildren().addAll(statusConexao,titulo,divisor, cardsRow); // adiciona tudo junto
+        layout.getChildren().addAll(statusConexao, titulo, divisor, cardsRow); // adiciona tudo junto
 
         Scene scene = new Scene(layout, 800, 600);
         stage.setScene(scene);
         stage.setTitle("ProjectCarScanner");
         stage.show();
 
-        new Thread(() ->{
-            while(true){
+        new Thread(() -> {
+            // primeiro conecta
+            if (!obdConnection.detectarEConectar()) {
+                Platform.runLater(() -> {
+                    statusConexao.setText("● nenhum dispositivo encontrado");
+                    statusConexao.setStyle("-fx-font-size: 12px; -fx-text-fill: #E24B4A;");
+                });
+                return; // para aqui se não conectou
+            }
+
+            Platform.runLater(() ->
+                    statusConexao.setText("● conectado — " + obdConnection.getPortName())
+            );
+
+            // só depois começa a ler
+            while (true) {
                 try {
                     double rpm = mostrarRPM.traduzirResposta();
                     double tensao = mostrarTensao.traduzirResposta();
                     double tps = mostrarTPS.traduzirResposta();
-                    double lambda =  mostrarLambda.traduzirResposta();
+                    double lambda = mostrarLambda.traduzirResposta();
 
                     Platform.runLater(() -> {
                         cardRpm.valor.setText(String.format("%.0f", rpm));
-                        cardRpm.barra.setPrefWidth(
-                                cardRpm.card.getWidth() * (rpm / cardRpm.valorMax));
-
+                        cardRpm.barra.setPrefWidth(cardRpm.card.getWidth() * (rpm / cardRpm.valorMax));
                         cardTensao.valor.setText(String.format("%.2f", tensao));
-                        cardTensao.barra.setPrefWidth(
-                                cardTensao.card.getWidth() * (tensao / cardTensao.valorMax));
-
+                        cardTensao.barra.setPrefWidth(cardTensao.card.getWidth() * (tensao / cardTensao.valorMax));
                         cardTps.valor.setText(String.format("%.1f", tps));
-                        cardTps.barra.setPrefWidth(
-                                cardTps.card.getWidth() * (tps / cardTps.valorMax));
-
+                        cardTps.barra.setPrefWidth(cardTps.card.getWidth() * (tps / cardTps.valorMax));
                         cardLambda.valor.setText(String.format("%.2f", lambda));
-                        cardLambda.barra.setPrefWidth(
-                                cardLambda.card.getWidth() * (lambda / cardLambda.valorMax));
-
-                        }
-                    );
-                } catch (Exception e){
-                    System.out.println("Erro na leitura: " + e.getMessage());
+                        cardLambda.barra.setPrefWidth(cardLambda.card.getWidth() * (lambda / cardLambda.valorMax));
+                    });
+                } catch (Exception e) {
+                    System.out.println("Erro: " + e.getMessage());
                 }
             }
-        }
-        ).start();
-
+        }).start();
     }
-
-
 }

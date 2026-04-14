@@ -11,10 +11,10 @@ import java.io.IOException;
 public class main {
     public static void main(String[] args) throws IOException, InterruptedException {
 
-            Application.launch(MainWindow.class, args);
+        Application.launch(MainWindow.class, args);
 
-
-        /*ObdConnection obdConnection = new ObdConnection();
+        /*
+        ObdConnection obdConnection = new ObdConnection();
         RPM mostrarRPM = new RPM(obdConnection);
         TPS mostrarTPS = new TPS(obdConnection);
         Tensao mostrarTensao = new Tensao(obdConnection);
@@ -24,7 +24,7 @@ public class main {
 
 
         int contador = 0;
-
+        obdConnection.detectarEConectar();
         obdConnection.openConnection();
 
         double lambdaBCatalyst = 1 + (fuelTrimBCatalyst.traduzirResposta() / 100);
@@ -45,5 +45,7 @@ public class main {
         }
 
         obdConnection.closeConnection();
-    }*/
-}}
+    */
+    }
+
+}

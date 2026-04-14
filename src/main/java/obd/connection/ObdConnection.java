@@ -8,7 +8,7 @@ public class ObdConnection {
     private SerialPort porta;
 
      public boolean openConnection(){
-         porta.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 2000,0);
+         porta.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 2000, 2000);
          return porta.openPort();
      }
 
@@ -33,17 +33,23 @@ public class ObdConnection {
          for(SerialPort p : portas){
              porta = p;
              porta.setBaudRate(38400);
-             porta.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 2000, 0);
+             porta.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 2000, 2000);
 
              if(porta.openPort()){
                  try {
-                     String resposta = enviarComando("ATZ \r");
-                     if (resposta.contains("ELM327")){
+                     porta.getOutputStream().write("ATZ\r".getBytes());
+                     porta.getOutputStream().flush();
+                     Thread.sleep(1500); // ← ATZ precisa de mais tempo
+                     byte[] buffer = new byte[256];
+                     int bytes = porta.getInputStream().read(buffer);
+                     String resposta = new String(buffer, 0, bytes);
+                     System.out.println("Resposta ATZ: " + resposta); // ver o que chega
+                     if(resposta.contains("ELM327")){
                          System.out.println("ELM327 encontrado em: " + p.getDescriptivePortName());
                          return true;
                      }
                  } catch (Exception e){
-
+                     System.out.println("Erro na porta " + p.getSystemPortName() + ": " + e.getMessage());
                  }
                  porta.closePort();
              }
