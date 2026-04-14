@@ -96,6 +96,13 @@ public class MainWindow extends Application {
                     double lambda = mostrarLambda.traduzirResposta();
 
                     Platform.runLater(() -> {
+                        try {
+                            System.out.println("RPM bruto: " + mostrarRPM.respostaObd());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                         cardRpm.valor.setText(String.format("%.0f", rpm));
                         cardRpm.barra.setPrefWidth(cardRpm.card.getWidth() * (rpm / cardRpm.valorMax));
                         cardTensao.valor.setText(String.format("%.2f", tensao));
@@ -104,7 +111,9 @@ public class MainWindow extends Application {
                         cardTps.barra.setPrefWidth(cardTps.card.getWidth() * (tps / cardTps.valorMax));
                         cardLambda.valor.setText(String.format("%.2f", lambda));
                         cardLambda.barra.setPrefWidth(cardLambda.card.getWidth() * (lambda / cardLambda.valorMax));
+
                     });
+                    Thread.sleep(500);
                 } catch (Exception e) {
                     System.out.println("Erro: " + e.getMessage());
                 }
