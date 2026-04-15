@@ -1,6 +1,6 @@
 package obd.connection;
 
-public interface IObdConnectionTeste {
+public interface IObdConnection {
     boolean openConnection();
     boolean closeConnection();
     String enviarComando(String comando) throws Exception;

@@ -1,20 +1,25 @@
 package obd.sensors;
 
+import obd.connection.IObdConnection;
 import obd.connection.ObdConnection;
 
 import java.io.IOException;
 
 public class Tensao extends Sensor{
     private double tensao;
-    public Tensao(ObdConnection obdConnection) {
-        super("0142\r", obdConnection);
+    public Tensao(IObdConnection obdConnection) {
+        super("ATRV\r", obdConnection);
     }
 
     @Override
-    public double traduzirResposta() throws IOException, InterruptedException {
-        String[] parts = respostaObd().split(" ");
-        System.out.println("Partes: " + parts.length + " -> " + String.join("|", parts));
-        tensao = (double) (Integer.parseInt(parts[2].trim(), 16) * 256 + Integer.parseInt(parts[3].trim(), 16)) / 1000.0;
+    public double traduzirResposta() throws Exception {
+        resposta = respostaObd();
+
+        if(resposta == "UNSUPPORTED"){
+            return 0.0;
+        }
+
+        tensao = Double.parseDouble(resposta);
 
         return tensao;
     }

@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javafx.scene.control.Label;
+import obd.connection.HomoObdConnection;
+import obd.connection.IObdConnection;
 import obd.connection.ObdConnection;
 import obd.sensors.FuelTrim;
 import obd.sensors.RPM;
@@ -24,7 +26,7 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage stage) {
 
-        ObdConnection obdConnection = new ObdConnection();
+        IObdConnection obdConnection = new HomoObdConnection();
 
         RPM mostrarRPM = new RPM(obdConnection);
         Tensao mostrarTensao = new Tensao(obdConnection);
@@ -73,7 +75,7 @@ public class MainWindow extends Application {
         stage.setTitle("ProjectCarScanner");
         stage.show();
 
-        new Thread(() -> {
+        Thread thread = new Thread(() -> {
             // primeiro conecta
             if (!obdConnection.detectarEConectar()) {
                 Platform.runLater(() -> {
@@ -87,12 +89,17 @@ public class MainWindow extends Application {
                     statusConexao.setText("● conectado — " + obdConnection.getPortName())
             );
 
-            LeituraObd leituraObd = new LeituraObd(obdConnection,mostrarTPS, mostrarRPM,mostrarLambda,mostrarTensao, (rpm) ->{
+            LeituraObd leituraObd = new LeituraObd(obdConnection,mostrarTPS, mostrarRPM,mostrarLambda,mostrarTensao, (rpm, tps, tensao, fuelTrim) ->{
                 Platform.runLater(()->{
                     cardRpm.valor.setText(String.format("%.0f", rpm));
+                    cardLambda.valor.setText(String.format("%.2f", fuelTrim));
+                    cardTps.valor.setText(String.format("%.2f", tps));
+                    cardTensao.valor.setText(String.format("%.1f", tensao));
                 });
             });
             leituraObd.getResponse();
-        }).start();
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 }
