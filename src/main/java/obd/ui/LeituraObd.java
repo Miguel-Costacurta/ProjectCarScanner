@@ -14,6 +14,8 @@ public class LeituraObd {
     private FuelTrim mostrarFuelTrim;
     private Tensao mostrarTensao;
 
+    private volatile boolean rodando = true;
+
     private IDataUpdate listener;
 
     LeituraObd(IObdConnection obdConnection, TPS tps, RPM rpm, FuelTrim fuelTrim, Tensao tensao
@@ -28,7 +30,7 @@ public class LeituraObd {
 
     public void getResponse() {
         double rpm, tps, tensao, fuelTrim;
-        while (true) {
+        while (rodando) {
             System.out.println("=== inicio da iteracao ===");
             try {
 
@@ -38,7 +40,7 @@ public class LeituraObd {
                 tensao = mostrarTensao.traduzirResposta();
                 fuelTrim = mostrarFuelTrim.traduzirResposta();
                 System.out.println("rpm lido: " + rpm);
-                System.out.println("tps lido: " + tps);
+                System.out.printf("tps lido: %.2f\n", tps);
                 System.out.println("tensao lido: " + tensao);
                 System.out.println("lambda lido: " + fuelTrim);
                 listener.onDataUpdate(rpm,tps,tensao,fuelTrim);
@@ -51,5 +53,9 @@ public class LeituraObd {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void stop(){
+        rodando = false;
     }
 }

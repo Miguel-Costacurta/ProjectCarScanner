@@ -4,7 +4,7 @@ import com.fazecast.jSerialComm.SerialPort;
 
 import java.io.IOException;
 
-public class ObdConnection {
+public class ObdConnection implements IObdConnection{
     private SerialPort porta;
 
      public boolean openConnection(){

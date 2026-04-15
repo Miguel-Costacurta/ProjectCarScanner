@@ -16,7 +16,7 @@ public class RPM extends Sensor{
     public double traduzirResposta() throws Exception {
         resposta = respostaObd();
 
-        if(resposta =="UNSUPPORTED") return 0.0;
+        if(resposta.equals("UNSUPPORTED")) return 0.0;
 
         String[] partes = resposta.split(" ");
 

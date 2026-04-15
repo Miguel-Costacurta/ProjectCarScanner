@@ -15,11 +15,11 @@ public class Tensao extends Sensor{
     public double traduzirResposta() throws Exception {
         resposta = respostaObd();
 
-        if(resposta == "UNSUPPORTED"){
+        if(resposta.equals("UNSUPPORTED")){
             return 0.0;
         }
 
-        tensao = Double.parseDouble(resposta);
+        tensao = Double.parseDouble(resposta.replaceAll("[^0-9.]", ""));
 
         return tensao;
     }

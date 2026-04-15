@@ -22,7 +22,6 @@ import java.io.IOException;
 
 public class MainWindow extends Application {
 
-
     @Override
     public void start(Stage stage) {
 
@@ -90,6 +89,7 @@ public class MainWindow extends Application {
             );
 
             LeituraObd leituraObd = new LeituraObd(obdConnection,mostrarTPS, mostrarRPM,mostrarLambda,mostrarTensao, (rpm, tps, tensao, fuelTrim) ->{
+
                 Platform.runLater(()->{
                     cardRpm.valor.setText(String.format("%.0f", rpm));
                     cardLambda.valor.setText(String.format("%.2f", fuelTrim));
@@ -97,6 +97,7 @@ public class MainWindow extends Application {
                     cardTensao.valor.setText(String.format("%.1f", tensao));
                 });
             });
+            stage.setOnCloseRequest(e -> leituraObd.stop());
             leituraObd.getResponse();
         });
         thread.setDaemon(true);

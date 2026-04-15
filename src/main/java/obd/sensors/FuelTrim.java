@@ -15,11 +15,11 @@ public class FuelTrim extends Sensor{
     public double traduzirResposta() throws Exception {
         resposta = respostaObd();
 
-        if(resposta =="UNSUPPORTED") return 0.0;
+        if(resposta.equals("UNSUPPORTED")) return 0.0;
 
         String[] parts = resposta.split(" ");
 
-        lambda = ((Integer.parseInt(parts[2].trim(),16) / 128.0 * 100) - 100);
+        lambda = Integer.parseInt(parts[2].trim(), 16) / 128.0;
 
         return lambda;
     }
