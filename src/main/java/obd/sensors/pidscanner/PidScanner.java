@@ -29,7 +29,7 @@ public class PidScanner {
 
             long bits = 0;
             for(int i = 2; i<= 5; i++){
-                bits = (bits <<0) | Integer.parseInt(partes[i].trim(),16);
+                bits = (bits << 8) | Integer.parseInt(partes[i].trim(),16);
             }
 
             for (int i = 0; i < 32; i++){

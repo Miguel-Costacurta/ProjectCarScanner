@@ -91,7 +91,11 @@ public class MainWindow extends Application {
             Platform.runLater(() ->
                     statusConexao.setText("● conectado — " + obdConnection.getPortName())
             );
-
+            try {
+                scanner.scanear();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             LeituraObd leituraObd = new LeituraObd(obdConnection,mostrarTPS, mostrarRPM,mostrarLambda,mostrarTensao, (rpm, tps, tensao, fuelTrim) ->{
 
                 Platform.runLater(()->{

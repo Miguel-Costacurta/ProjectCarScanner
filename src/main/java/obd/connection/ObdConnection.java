@@ -19,7 +19,7 @@ public class ObdConnection implements IObdConnection{
      public String enviarComando(String comando) throws IOException, InterruptedException {
          porta.getOutputStream().write(comando.getBytes());
          porta.getOutputStream().flush();
-         Thread.sleep(250);
+         Thread.sleep(50);
          byte[] buffer = new byte[256];
          int bytes = porta.getInputStream().read(buffer);
          String resposta = new String(buffer, 0, bytes);
@@ -40,7 +40,7 @@ public class ObdConnection implements IObdConnection{
                      porta.getOutputStream().write("ATE0\r".getBytes());
                      porta.getOutputStream().write("ATZ\r".getBytes());
                      porta.getOutputStream().flush();
-                     Thread.sleep(1500); // ← ATZ precisa de mais tempo
+                     Thread.sleep(500); // ← ATZ precisa de mais tempo
                      byte[] buffer = new byte[256];
                      int bytes = porta.getInputStream().read(buffer);
                      String resposta = new String(buffer, 0, bytes);
