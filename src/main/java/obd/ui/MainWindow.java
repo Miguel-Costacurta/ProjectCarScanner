@@ -67,7 +67,7 @@ public class MainWindow extends Application {
 
         cardsRow.getChildren().addAll(cardRpm.card, cardTps.card, cardTensao.card, cardLambda.card);
 
-        layout.getChildren().addAll(statusConexao, titulo, divisor, cardsRow); // adiciona tudo junto
+        layout.getChildren().addAll(statusConexao, titulo, divisor, cardsRow);
 
         Scene scene = new Scene(layout, 800, 600);
         stage.setScene(scene);

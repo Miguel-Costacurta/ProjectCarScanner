@@ -19,7 +19,7 @@ public class ObdConnection implements IObdConnection{
      public String enviarComando(String comando) throws IOException, InterruptedException {
          porta.getOutputStream().write(comando.getBytes());
          porta.getOutputStream().flush();
-         Thread.sleep(300);
+         Thread.sleep(250);
          byte[] buffer = new byte[256];
          int bytes = porta.getInputStream().read(buffer);
          String resposta = new String(buffer, 0, bytes);
@@ -37,6 +37,7 @@ public class ObdConnection implements IObdConnection{
 
              if(porta.openPort()){
                  try {
+                     porta.getOutputStream().write("ATE0\r".getBytes());
                      porta.getOutputStream().write("ATZ\r".getBytes());
                      porta.getOutputStream().flush();
                      Thread.sleep(1500); // ← ATZ precisa de mais tempo
@@ -46,6 +47,8 @@ public class ObdConnection implements IObdConnection{
                      System.out.println("Resposta ATZ: " + resposta); // ver o que chega
                      if(resposta.contains("ELM327")){
                          System.out.println("ELM327 encontrado em: " + p.getDescriptivePortName());
+                         enviarComando("ATE0\r");
+                         enviarComando("ATL0\r");
                          return true;
                      }
                  } catch (Exception e){

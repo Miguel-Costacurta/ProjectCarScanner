@@ -30,7 +30,7 @@ public abstract class Sensor{
                     !resposta.contains("NO DATA")){
                 valid = true;
             } else {
-                Thread.sleep(550);
+                Thread.sleep(100);
             }
         }
 

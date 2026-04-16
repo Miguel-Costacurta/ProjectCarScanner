@@ -45,8 +45,7 @@ public class LeituraObd {
                 System.out.println("lambda lido: " + fuelTrim);
                 listener.onDataUpdate(rpm,tps,tensao,fuelTrim);
 
-                Thread.sleep(500);
-
+                Thread.sleep(0);
 
             } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
