@@ -10,10 +10,7 @@ import java.io.IOException;
 public class main {
 
     public static void main(String[] args) throws Exception {
-        IObdConnection iObdConnection = new ObdConnection();
-        PidScanner scanner = new PidScanner(iObdConnection);
-        scanner.scanear();
-        //Application.launch(MainWindow.class, args);
+        Application.launch(MainWindow.class, args);
 
     }
 

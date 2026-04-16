@@ -45,7 +45,7 @@ public class ObdConnection implements IObdConnection{
                      int bytes = porta.getInputStream().read(buffer);
                      String resposta = new String(buffer, 0, bytes);
                      System.out.println("Resposta ATZ: " + resposta); // ver o que chega
-                     if(resposta.contains("ELM327")){
+                     if(resposta.contains("ELM327") || resposta.contains("OK")){
                          System.out.println("ELM327 encontrado em: " + p.getDescriptivePortName());
                          enviarComando("ATE0\r");
                          enviarComando("ATL0\r");

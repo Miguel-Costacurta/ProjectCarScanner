@@ -26,7 +26,7 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage stage) {
 
-        IObdConnection obdConnection = new HomoObdConnection();
+        IObdConnection obdConnection = new ObdConnection();
 
         PidScanner scanner = new PidScanner(obdConnection);
         RPM mostrarRPM = new RPM(obdConnection);
