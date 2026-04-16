@@ -56,6 +56,8 @@ public class HomoObdConnection implements IObdConnection {
                 int b = raw & 0xFF;
                 return String.format("43 %02X %02X >", a, b);
             }
+            case "0100\r":
+                return "41 00 BE 3E B8 11 >";
             default:
                 return "7F 01 12 >";
         }

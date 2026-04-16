@@ -17,6 +17,7 @@ import obd.sensors.FuelTrim;
 import obd.sensors.RPM;
 import obd.sensors.TPS;
 import obd.sensors.Tensao;
+import obd.sensors.pidscanner.PidScanner;
 
 import java.io.IOException;
 
@@ -27,10 +28,13 @@ public class MainWindow extends Application {
 
         IObdConnection obdConnection = new HomoObdConnection();
 
+        PidScanner scanner = new PidScanner(obdConnection);
         RPM mostrarRPM = new RPM(obdConnection);
         Tensao mostrarTensao = new Tensao(obdConnection);
         TPS mostrarTPS = new TPS(obdConnection);
         FuelTrim mostrarLambda = new FuelTrim(obdConnection, 1);
+
+
 
         Label statusConexao = new Label();
         statusConexao.setStyle("-fx-font-size: 12px; -fx-text-fill: #1D9E75;");
@@ -75,7 +79,7 @@ public class MainWindow extends Application {
         stage.show();
 
         Thread thread = new Thread(() -> {
-            // primeiro conecta
+
             if (!obdConnection.detectarEConectar()) {
                 Platform.runLater(() -> {
                     statusConexao.setText("● nenhum dispositivo encontrado");
