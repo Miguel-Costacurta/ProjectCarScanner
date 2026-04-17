@@ -31,11 +31,9 @@ public class LeituraObd {
     public void getResponse() {
         double rpm, tps, tensao, fuelTrim,spark, velocity;
         while (rodando) {
-            System.out.println("=== inicio da iteracao ===");
             try {
-
-                System.out.println("=== mostrando os dados ===");
                 rpm = mostrarRpm.traduzirResposta();
+                System.out.println("RAW: " + mostrarRpm.respostaObd());
                 tps = mostrarTps.traduzirResposta();
                 tensao = mostrarTensao.traduzirResposta();
                 fuelTrim = mostrarFuelTrim.traduzirResposta();

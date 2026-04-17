@@ -20,7 +20,7 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage stage) {
 
-        IObdConnection obdConnection = new HomoObdConnection();
+        IObdConnection obdConnection = new ObdConnection();
 
         PidScanner scanner = new PidScanner(obdConnection);
         RPM mostrarRPM = new RPM(obdConnection);
@@ -93,10 +93,17 @@ public class MainWindow extends Application {
             Platform.runLater(() ->
                     statusConexao.setText("● conectado — " + obdConnection.getPortName())
             );
+
+            try {
+                Thread.sleep(500); // ← deixa o ELM estabilizar
+            } catch (Exception e) {
+                System.out.println("Erro ");;
+            }
+
             try {
                 scanner.scanear();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                System.out.println("Erro no scanner: " + e.getMessage());
             }
             LeituraObd leituraObd = new LeituraObd(obdConnection,mostrarTPS, mostrarRPM,mostrarLambda,mostrarTensao,mostrarAvanco,mostrarVelocidade, (rpm, tps, tensao, fuelTrim,spark,velocity) ->{
 

@@ -19,13 +19,14 @@ public class PidScanner {
         int[] baseOffset = {1,33,65};
 
         for (int r= 0; r < ranges.length; r++){
+            System.out.println("Executando varredura: " + r);
             String resposta = iObdConnection.enviarComando(ranges[r]);
             resposta = resposta.replace(">","").trim();
 
-            if(resposta.startsWith("7F")) break;
+            if(resposta.startsWith("7F")) continue;
 
             String[] partes = resposta.split(" ");
-            if (partes.length <6) break;
+            if (partes.length < 6) continue;
 
             long bits = 0;
             for(int i = 2; i<= 5; i++){

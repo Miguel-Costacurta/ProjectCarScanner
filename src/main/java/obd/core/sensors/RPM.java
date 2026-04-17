@@ -12,7 +12,7 @@ public class RPM extends Sensor {
     @Override
     public double traduzirResposta() throws Exception {
         resposta = respostaObd();
-
+        System.out.println("RAW: " + resposta);
         if(resposta.equals("UNSUPPORTED")) return 0.0;
 
         String[] partes = resposta.split(" ");
