@@ -19,7 +19,12 @@ public abstract class Sensor{
 
     public String respostaObd() throws Exception {
         boolean valid = false;
+
         while(!valid){
+            /*if(resposta == null || resposta.trim().isEmpty() || resposta.trim().equals(">")){
+                Thread.sleep(100);
+                continue;
+            }*/
             resposta = obdConnection.enviarComando(codigo);
             if (resposta.startsWith("7F")){
                 System.out.println("PID nao suportado: " + codigo);

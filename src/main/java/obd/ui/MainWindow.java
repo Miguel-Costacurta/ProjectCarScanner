@@ -91,10 +91,17 @@ public class MainWindow extends Application {
             Platform.runLater(() ->
                     statusConexao.setText("● conectado — " + obdConnection.getPortName())
             );
+
+            try {
+                Thread.sleep(500); // ← deixa o ELM estabilizar
+            } catch (Exception e) {
+                System.out.println("Erro ");;
+            }
+
             try {
                 scanner.scanear();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                System.out.println("Erro no scanner: " + e.getMessage());
             }
             LeituraObd leituraObd = new LeituraObd(obdConnection,mostrarTPS, mostrarRPM,mostrarLambda,mostrarTensao, (rpm, tps, tensao, fuelTrim) ->{
 

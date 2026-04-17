@@ -16,7 +16,7 @@ public class TPS extends Sensor{
     public double traduzirResposta() throws Exception {
         resposta = respostaObd();
         if(resposta.equals("UNSUPPORTED")) return 0.0;
-
+        System.out.println("RAW: " + resposta);
         String[] part = resposta.split(" ");
 
        tps = ((double) (Integer.parseInt(part[2].trim(), 16) * 100) / 255);
