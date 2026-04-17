@@ -38,7 +38,7 @@ public class LeituraObd {
                 tensao = mostrarTensao.traduzirResposta();
                 fuelTrim = mostrarFuelTrim.traduzirResposta();
                 spark = mostrarAvanco.traduzirResposta();
-                velocity = mostrarAvanco.traduzirResposta();
+                velocity = mostrarVelocidade.traduzirResposta();
                 System.out.println("rpm lido: " + rpm);
                 System.out.printf("tps lido: %.2f\n", tps);
                 System.out.println("tensao lido: " + tensao);

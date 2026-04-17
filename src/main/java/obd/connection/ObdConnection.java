@@ -54,7 +54,9 @@ public class ObdConnection implements IObdConnection{
                         System.out.println("ELM327 encontrado em: " + p.getDescriptivePortName());
                         enviarComando("ATE0\r");
                         enviarComando("ATL0\r");
+                        enviarComando("ATAT1\r");
                         enviarComando("ATST0\r");
+
                         return true;
                     }
                 } catch (Exception e){

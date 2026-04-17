@@ -10,9 +10,9 @@ public class Velocity extends Sensor{
     }
     @Override
     public double traduzirResposta() throws Exception {
-        String resposta = respostaObd();
+        String[] parts = respostaObd().split(" ");
 
-        velocity = Integer.parseInt(resposta.trim(),16);
+        velocity = Integer.parseInt(parts[2].trim(),16);
 
         return velocity;
     }
