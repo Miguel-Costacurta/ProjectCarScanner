@@ -1,9 +1,6 @@
-package obd.sensors;
+package obd.core.sensors;
 
 import obd.connection.IObdConnection;
-import obd.connection.ObdConnection;
-
-import java.io.IOException;
 
 public abstract class Sensor{
     protected String resposta;
@@ -27,7 +24,8 @@ public abstract class Sensor{
             }
             if(!resposta.contains("SEARCHING") &&
                     !resposta.contains("ERROR") &&
-                    !resposta.contains("NO DATA")){
+                    !resposta.contains("NO DATA") &&
+                    !resposta.isBlank()){
                 valid = true;
             } else {
                 Thread.sleep(100);

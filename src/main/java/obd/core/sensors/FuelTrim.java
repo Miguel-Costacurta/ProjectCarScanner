@@ -1,11 +1,8 @@
-package obd.sensors;
+package obd.core.sensors;
 
 import obd.connection.IObdConnection;
-import obd.connection.ObdConnection;
 
-import java.io.IOException;
-
-public class FuelTrim extends Sensor{
+public class FuelTrim extends Sensor {
     private double lambda;
     public FuelTrim(IObdConnection obdConnection, int band){
         super(band == 1 ? "0106\r" : "0109\r", obdConnection);

@@ -1,11 +1,8 @@
-package obd.sensors;
+package obd.core.sensors;
 
 import obd.connection.IObdConnection;
-import obd.connection.ObdConnection;
 
-import java.io.IOException;
-
-public class RPM extends Sensor{
+public class RPM extends Sensor {
     private double rpm;
 
     public RPM(IObdConnection obdConnection){

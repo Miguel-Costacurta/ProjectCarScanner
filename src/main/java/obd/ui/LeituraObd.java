@@ -1,11 +1,7 @@
 package obd.ui;
 
-import javafx.application.Platform;
 import obd.connection.IObdConnection;
-import obd.connection.ObdConnection;
-import obd.sensors.*;
-
-import java.io.IOException;
+import obd.core.sensors.*;
 
 public class LeituraObd {
     private IObdConnection obdConnection;
@@ -13,23 +9,27 @@ public class LeituraObd {
     private RPM mostrarRpm;
     private FuelTrim mostrarFuelTrim;
     private Tensao mostrarTensao;
+    private SparkAdvance mostrarAvanco;
+    private Velocity mostrarVelocidade;
 
     private volatile boolean rodando = true;
 
     private IDataUpdate listener;
 
-    LeituraObd(IObdConnection obdConnection, TPS tps, RPM rpm, FuelTrim fuelTrim, Tensao tensao
-                , IDataUpdate listener) {
+    LeituraObd(IObdConnection obdConnection, TPS tps, RPM rpm, FuelTrim fuelTrim, Tensao tensao,
+                SparkAdvance avanco,Velocity velocity ,IDataUpdate listener) {
         this.listener = listener;
         this.obdConnection = obdConnection;
         this.mostrarRpm = rpm;
         this.mostrarTps = tps;
         this.mostrarFuelTrim = fuelTrim;
         this.mostrarTensao = tensao;
+        this.mostrarVelocidade = velocity;
+        this.mostrarAvanco = avanco;
     }
 
     public void getResponse() {
-        double rpm, tps, tensao, fuelTrim;
+        double rpm, tps, tensao, fuelTrim,spark, velocity;
         while (rodando) {
             System.out.println("=== inicio da iteracao ===");
             try {
@@ -39,11 +39,13 @@ public class LeituraObd {
                 tps = mostrarTps.traduzirResposta();
                 tensao = mostrarTensao.traduzirResposta();
                 fuelTrim = mostrarFuelTrim.traduzirResposta();
+                spark = mostrarAvanco.traduzirResposta();
+                velocity = mostrarAvanco.traduzirResposta();
                 System.out.println("rpm lido: " + rpm);
                 System.out.printf("tps lido: %.2f\n", tps);
                 System.out.println("tensao lido: " + tensao);
                 System.out.println("lambda lido: " + fuelTrim);
-                listener.onDataUpdate(rpm,tps,tensao,fuelTrim);
+                listener.onDataUpdate(rpm,tps,tensao,fuelTrim,spark,velocity);
 
                 Thread.sleep(50);
 

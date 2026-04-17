@@ -1,4 +1,4 @@
-package obd.sensors.pidscanner;
+package obd.core.pidscanner;
 
 import obd.connection.IObdConnection;
 

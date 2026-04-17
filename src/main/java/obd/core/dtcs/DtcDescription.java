@@ -1,4 +1,4 @@
-package obd.sensors.dtcs;
+package obd.core.dtcs;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,11 +1,8 @@
-package obd.sensors;
+package obd.core.sensors;
 
 import obd.connection.IObdConnection;
-import obd.connection.ObdConnection;
 
-import java.io.IOException;
-
-public class Tensao extends Sensor{
+public class Tensao extends Sensor {
     private double tensao;
     public Tensao(IObdConnection obdConnection) {
         super("ATRV\r", obdConnection);

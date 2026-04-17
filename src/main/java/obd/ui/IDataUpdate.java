@@ -1,5 +1,5 @@
 package obd.ui;
 
 public interface IDataUpdate {
-    void onDataUpdate(double rpm, double tps, double tensao, double lambda);
+    void onDataUpdate(double rpm, double tps, double tensao, double lambda, double spark, double velocity);
 }

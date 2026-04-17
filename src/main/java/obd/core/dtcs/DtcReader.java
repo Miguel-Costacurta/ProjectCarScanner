@@ -1,4 +1,4 @@
-package obd.sensors.dtcs;
+package obd.core.dtcs;
 
 import obd.connection.IObdConnection;
 import java.util.ArrayList;

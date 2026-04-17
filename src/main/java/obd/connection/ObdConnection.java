@@ -37,8 +37,9 @@ public class ObdConnection implements IObdConnection{
 
              if(porta.openPort()){
                  try {
-                     porta.getOutputStream().write("ATE0\r".getBytes());
                      porta.getOutputStream().write("ATZ\r".getBytes());
+                     porta.getOutputStream().write("ATE0\r".getBytes());
+                     porta.getOutputStream().write("ATL0\r".getBytes());
                      porta.getOutputStream().flush();
                      Thread.sleep(500); // ← ATZ precisa de mais tempo
                      byte[] buffer = new byte[256];

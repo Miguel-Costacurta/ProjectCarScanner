@@ -1,11 +1,8 @@
-package obd.sensors;
+package obd.core.sensors;
 
 import obd.connection.IObdConnection;
-import obd.connection.ObdConnection;
 
-import java.io.IOException;
-
-public class TPS extends Sensor{
+public class TPS extends Sensor {
     private double tps;
 
     public TPS(IObdConnection obdConnection) {
