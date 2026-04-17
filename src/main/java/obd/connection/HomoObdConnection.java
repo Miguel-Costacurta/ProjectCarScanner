@@ -1,6 +1,11 @@
 package obd.connection;
 
+import com.fazecast.jSerialComm.SerialPort;
+import obd.core.dtcs.DtcDescription;
+import obd.core.dtcs.DtcReader;
+
 import java.io.IOException;
+import java.util.List;
 
 public class HomoObdConnection implements IObdConnection {
 
