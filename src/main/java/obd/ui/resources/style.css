@@ -1,0 +1,835 @@
+/* ============================================================
+   ProjectCarScanner — style.css
+   JavaFX CSS — prefixo -fx- obrigatório
+   ============================================================ */
+
+/* ── VARIÁVEIS GLOBAIS (root) ────────────────────────────── */
+.root {
+    -fx-background-color: #0a0a0a;
+    -fx-font-family: "Courier New";
+    /* Cores principais — use como referência nos setStyle() do Java */
+    /* --verde:    #1D9E75  */
+    /* --vermelho: #E24B4A  */
+    /* --fundo:    #0a0a0a  */
+    /* --card:     #111111  */
+    /* --borda:    #1a1a1a  */
+    /* --texto:    #e0e0e0  */
+    /* --muted:    #444444  */
+}
+
+/* ============================================================
+   TELA DE CONEXÃO
+   ============================================================ */
+
+.conn-screen {
+    -fx-background-color: #0a0a0a;
+    -fx-padding: 40;
+    -fx-spacing: 32;
+    -fx-alignment: center;
+}
+
+.conn-logo {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1D9E75;
+    -fx-letter-spacing: 0.25em;
+}
+
+.conn-sub {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.2em;
+}
+
+/* Cards de seleção Bluetooth / USB */
+.conn-card {
+    -fx-background-color: #111111;
+    -fx-border-color: #222222;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 28 36 28 36;
+    -fx-spacing: 12;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-min-width: 160px;
+}
+
+.conn-card:hover {
+    -fx-border-color: #1D9E75;
+    -fx-background-color: #0a1a12;
+}
+
+.conn-card-selected {
+    -fx-border-color: #1D9E75;
+    -fx-background-color: #0a1a12;
+}
+
+.conn-card-label {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 10px;
+    -fx-text-fill: #888888;
+    -fx-letter-spacing: 0.15em;
+}
+
+.conn-card-desc {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #444444;
+    -fx-text-alignment: center;
+}
+
+.conn-port-label {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.15em;
+}
+
+.conn-combo {
+    -fx-background-color: #111111;
+    -fx-border-color: #222222;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #888888;
+    -fx-padding: 5 10 5 10;
+}
+
+.conn-combo .list-cell {
+    -fx-background-color: #111111;
+    -fx-text-fill: #888888;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+}
+
+.conn-combo .list-cell:hover {
+    -fx-background-color: #1a1a1a;
+}
+
+/* ── BOTÃO CONECTAR ─────────────────────────────────────── */
+.btn-conectar {
+    -fx-background-color: #1D9E75;
+    -fx-text-fill: #000000;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.2em;
+    -fx-padding: 10 32 10 32;
+    -fx-background-radius: 2px;
+    -fx-cursor: hand;
+}
+
+.btn-conectar:hover {
+    -fx-opacity: 0.85;
+}
+
+.btn-conectar:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+
+.topbar {
+    -fx-background-color: #0f0f0f;
+    -fx-border-color: transparent transparent #1D9E75 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 7 14 7 14;
+    -fx-alignment: center-left;
+}
+
+.topbar-logo {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1D9E75;
+    -fx-letter-spacing: 0.3em;
+}
+
+.topbar-veiculo {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #555555;
+    -fx-letter-spacing: 0.1em;
+}
+
+.topbar-badge {
+    -fx-background-color: #0a1f16;
+    -fx-border-color: #1D9E75;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-text-fill: #1D9E75;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-padding: 2 7 2 7;
+    -fx-letter-spacing: 0.08em;
+}
+
+.btn-desconectar {
+    -fx-background-color: transparent;
+    -fx-border-color: #333333;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-text-fill: #555555;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-padding: 2 7 2 7;
+    -fx-letter-spacing: 0.08em;
+    -fx-cursor: hand;
+}
+
+.btn-desconectar:hover {
+    -fx-border-color: #E24B4A;
+    -fx-text-fill: #E24B4A;
+}
+
+/* Indicador LIVE (Label com bolinha verde animada via Java) */
+.live-dot {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #1D9E75;
+    -fx-letter-spacing: 0.15em;
+}
+
+/* ============================================================
+   NAVBAR (menu de abas)
+   ============================================================ */
+
+.navbar {
+    -fx-background-color: #0f0f0f;
+    -fx-border-color: transparent transparent #1a1a1a transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0;
+    -fx-spacing: 0;
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent transparent transparent;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-text-fill: #444444;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-letter-spacing: 0.18em;
+    -fx-padding: 10 14 10 14;
+    -fx-cursor: hand;
+}
+
+.nav-btn:hover {
+    -fx-text-fill: #888888;
+}
+
+.nav-btn-active {
+    -fx-text-fill: #1D9E75;
+    -fx-border-color: transparent transparent #1D9E75 transparent;
+}
+
+/* ============================================================
+   SENSOR CARD (aba Sensores)
+   ============================================================ */
+
+.sensor-card {
+    -fx-background-color: #111111;
+    -fx-border-color: #1a1a1a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 11;
+    -fx-spacing: 5;
+}
+
+/* Linha verde no topo — simulada com um Pane de altura 2 */
+.card-top-line {
+    -fx-background-color: #1D9E75;
+    -fx-pref-height: 2px;
+    -fx-max-width: 99999px;
+}
+
+.card-top-line-warn {
+    -fx-background-color: #E24B4A;
+}
+
+/* Card em modo alerta (lambda fora de faixa, temp. alta, etc) */
+.sensor-card-warn {
+    -fx-border-color: #2a1212;
+}
+
+.card-label {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.25em;
+}
+
+.card-value {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0f0f0;
+}
+
+.card-value-warn {
+    -fx-text-fill: #E24B4A;
+}
+
+.card-unit {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.1em;
+}
+
+/* Barra de progresso inferior do card */
+.card-bar-bg {
+    -fx-background-color: #1a1a1a;
+    -fx-background-radius: 1px;
+    -fx-pref-height: 2px;
+    -fx-max-width: 99999px;
+}
+
+.card-bar {
+    -fx-background-color: #1D9E75;
+    -fx-background-radius: 1px;
+    -fx-pref-height: 2px;
+}
+
+.card-bar-warn {
+    -fx-background-color: #E24B4A;
+}
+
+/* ── SENSOR EM LISTA (modo compacto quando há muitos PIDs) ── */
+
+.sensor-list-item {
+    -fx-background-color: #111111;
+    -fx-border-color: #1a1a1a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 8 12 8 12;
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+}
+
+.sli-label {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.15em;
+    -fx-min-width: 90px;
+}
+
+.sli-value {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0f0f0;
+    -fx-min-width: 70px;
+}
+
+.sli-unit {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #444444;
+    -fx-min-width: 28px;
+}
+
+/* ── PAINEL LATERAL DE GRÁFICO ──────────────────────────── */
+
+.graph-panel {
+    -fx-background-color: #111111;
+    -fx-border-color: #1a1a1a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 12;
+    -fx-spacing: 8;
+    -fx-pref-width: 220px;
+    -fx-min-width: 220px;
+}
+
+.graph-title {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.2em;
+}
+
+.graph-opt {
+    -fx-background-color: transparent;
+    -fx-text-fill: #555555;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-letter-spacing: 0.1em;
+    -fx-padding: 3 6 3 6;
+    -fx-background-radius: 2px;
+    -fx-cursor: hand;
+}
+
+.graph-opt-active {
+    -fx-text-fill: #1D9E75;
+    -fx-background-color: #0a1a12;
+}
+
+/* ============================================================
+   ABA DTC
+   ============================================================ */
+
+.dtc-toolbar {
+    -fx-spacing: 8;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Botão genérico */
+.btn {
+    -fx-background-color: transparent;
+    -fx-border-color: #333333;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-text-fill: #888888;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-letter-spacing: 0.18em;
+    -fx-padding: 6 12 6 12;
+    -fx-cursor: hand;
+}
+
+.btn:hover {
+    -fx-border-color: #555555;
+    -fx-text-fill: #aaaaaa;
+}
+
+/* Botão verde */
+.btn-green {
+    -fx-border-color: #1D9E75;
+    -fx-text-fill: #1D9E75;
+}
+
+.btn-green:hover {
+    -fx-background-color: #0a1f16;
+}
+
+/* Botão vermelho */
+.btn-red {
+    -fx-border-color: #E24B4A;
+    -fx-text-fill: #E24B4A;
+}
+
+.btn-red:hover {
+    -fx-background-color: #1f0a0a;
+}
+
+/* Linha de DTC */
+.dtc-row {
+    -fx-background-color: #111111;
+    -fx-border-color: #2a1212;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 10 14 10 14;
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+}
+
+.dtc-code {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 12px;
+    -fx-text-fill: #E24B4A;
+    -fx-letter-spacing: 0.08em;
+    -fx-min-width: 52px;
+}
+
+.dtc-desc {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 10px;
+    -fx-text-fill: #888888;
+}
+
+.dtc-badge {
+    -fx-background-color: transparent;
+    -fx-border-color: #E24B4A;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-text-fill: #E24B4A;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 7px;
+    -fx-padding: 2 5 2 5;
+    -fx-letter-spacing: 0.08em;
+}
+
+.dtc-empty {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #333333;
+    -fx-letter-spacing: 0.15em;
+}
+
+/* ============================================================
+   ABA PIDs ATIVOS
+   ============================================================ */
+
+.pid-search {
+    -fx-background-color: #111111;
+    -fx-border-color: #222222;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-text-fill: #888888;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-padding: 7 12 7 12;
+    -fx-letter-spacing: 0.08em;
+    -fx-prompt-text-fill: #333333;
+}
+
+.pid-search:focused {
+    -fx-border-color: #1D9E75;
+}
+
+.pid-row {
+    -fx-background-color: #111111;
+    -fx-border-color: #1a1a1a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 9 11 9 11;
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+}
+
+.pid-row:hover {
+    -fx-border-color: #333333;
+}
+
+.pid-row-selected {
+    -fx-border-color: #1D9E75;
+    -fx-background-color: #0a1a12;
+}
+
+.pid-hex {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #1D9E75;
+    -fx-min-width: 24px;
+}
+
+.pid-name {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #888888;
+}
+
+/* Toggle on/off — simulado com um Pane arredondado via Java */
+.pid-toggle-off {
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: #333333;
+    -fx-border-width: 1px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-pref-width: 26px;
+    -fx-pref-height: 13px;
+}
+
+.pid-toggle-on {
+    -fx-background-color: #1D9E75;
+    -fx-border-color: #1D9E75;
+    -fx-border-width: 1px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-pref-width: 26px;
+    -fx-pref-height: 13px;
+}
+
+.pid-count {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #333333;
+    -fx-letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   ABA VEÍCULO
+   ============================================================ */
+
+.vin-card {
+    -fx-background-color: #111111;
+    -fx-border-color: #1a1a1a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 14;
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+}
+
+.vin-nome {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 14px;
+    -fx-text-fill: #f0f0f0;
+    -fx-letter-spacing: 0.05em;
+}
+
+.vin-sub {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #555555;
+    -fx-letter-spacing: 0.15em;
+}
+
+.vin-box {
+    -fx-background-color: #0a1a12;
+    -fx-border-color: #1D9E75;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-padding: 7 12 7 12;
+    -fx-spacing: 3;
+}
+
+.vin-box-label {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 7px;
+    -fx-text-fill: #1D9E75;
+    -fx-letter-spacing: 0.15em;
+}
+
+.vin-box-value {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 10px;
+    -fx-text-fill: #1D9E75;
+    -fx-letter-spacing: 0.15em;
+}
+
+.veiculo-card {
+    -fx-background-color: #111111;
+    -fx-border-color: #1a1a1a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 10 12 10 12;
+    -fx-spacing: 4;
+}
+
+.veiculo-card-label {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 7px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.18em;
+}
+
+.veiculo-card-value {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 12px;
+    -fx-text-fill: #e0e0e0;
+}
+
+.obd-row {
+    -fx-background-color: #0a1a12;
+    -fx-border-color: #1a2a1a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 11 14 11 14;
+    -fx-spacing: 32;
+    -fx-alignment: center-left;
+}
+
+.obd-item-label {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 7px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.15em;
+}
+
+.obd-item-value {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 10px;
+    -fx-text-fill: #1D9E75;
+    -fx-letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   ABA CONFIGURAÇÕES
+   ============================================================ */
+
+.config-section {
+    -fx-background-color: #111111;
+    -fx-border-color: #1a1a1a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 12;
+    -fx-spacing: 0;
+}
+
+.config-title {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 8px;
+    -fx-text-fill: #444444;
+    -fx-letter-spacing: 0.25em;
+    -fx-padding: 0 0 6 0;
+}
+
+.config-row {
+    -fx-padding: 6 0 6 0;
+    -fx-border-color: transparent transparent #141414 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: center-left;
+    -fx-spacing: 8;
+}
+
+.config-label {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #888888;
+    -fx-letter-spacing: 0.05em;
+}
+
+.config-value {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #1D9E75;
+    -fx-letter-spacing: 0.05em;
+}
+
+.config-input {
+    -fx-background-color: #0a0a0a;
+    -fx-border-color: #222222;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-text-fill: #888888;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-padding: 3 8 3 8;
+    -fx-pref-width: 80px;
+    -fx-alignment: center-right;
+}
+
+.config-input:focused {
+    -fx-border-color: #1D9E75;
+}
+
+.config-combo {
+    -fx-background-color: #0a0a0a;
+    -fx-border-color: #222222;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+    -fx-text-fill: #888888;
+    -fx-padding: 3 8 3 8;
+}
+
+.config-combo .list-cell {
+    -fx-background-color: #111111;
+    -fx-text-fill: #888888;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+}
+
+.config-combo .list-cell:hover {
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #aaaaaa;
+}
+
+/* ============================================================
+   STATUS BAR (rodapé)
+   ============================================================ */
+
+.statusbar {
+    -fx-background-color: #0d0d0d;
+    -fx-border-color: #161616 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 4 14 4 14;
+    -fx-spacing: 20;
+    -fx-alignment: center-left;
+}
+
+.status-key {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 7px;
+    -fx-text-fill: #333333;
+    -fx-letter-spacing: 0.1em;
+}
+
+.status-val {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 7px;
+    -fx-text-fill: #555555;
+    -fx-letter-spacing: 0.1em;
+}
+
+.status-warn {
+    -fx-text-fill: #E24B4A;
+}
+
+/* ============================================================
+   SCROLL BARS (estilizadas para combinar com o tema)
+   ============================================================ */
+
+.scroll-bar {
+    -fx-background-color: #0a0a0a;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #222222;
+    -fx-background-radius: 2px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #333333;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #111111;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: #333333;
+}
+
+/* ============================================================
+   SEPARADOR / DIVISOR
+   ============================================================ */
+
+.divisor {
+    -fx-background-color: #1a1a1a;
+    -fx-pref-height: 1px;
+    -fx-max-width: 99999px;
+}
+
+/* ============================================================
+   TOOLTIP
+   ============================================================ */
+
+.tooltip {
+    -fx-background-color: #111111;
+    -fx-border-color: #1D9E75;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-text-fill: #888888;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 9px;
+}

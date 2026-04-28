@@ -12,10 +12,15 @@ import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import obd.connection.HomoObdConnection;
 import obd.connection.IObdConnection;
+import obd.connection.ObdConnection;
 import obd.core.sensors.*;
 import obd.core.pidscanner.PidScanner;
 
 public class MainWindow extends Application {
+
+    public MainWindow(IObdConnection obdConnection, Stage stage){
+
+    }
 
     @Override
     public void start(Stage stage) {
@@ -122,4 +127,5 @@ public class MainWindow extends Application {
         thread.setDaemon(true);
         thread.start();
     }
+    public void show(){}
 }
