@@ -273,7 +273,7 @@ public class ConnectWindow {
 
     // ── abre a janela principal depois de conectar ────────────
     private void iniciarApp(IObdConnection obdConnection) {
-        MainWindow mainWindow = new MainWindow(obdConnection, stage);
+        MainWindow mainWindow = new MainWindow(stage,obdConnection);
         mainWindow.show();
     }
 

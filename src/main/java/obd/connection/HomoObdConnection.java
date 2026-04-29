@@ -13,7 +13,8 @@ public class HomoObdConnection implements IObdConnection {
     private double tps = 13.0;
     private double tensao = 12.8;
     private double lambda = 128.0;
-
+    private double spark = 0.0;
+    private double velocity = 0.0;
     private double dtc = 128.0;
 
     private final java.util.Random random = new java.util.Random();
@@ -58,6 +59,16 @@ public class HomoObdConnection implements IObdConnection {
             }
             case "0100\r":
                 return "41 00 BE 3E B8 11 >";
+
+            case "010E\r":
+                spark = oscilar(spark, 20, -64, 63);
+                int A = (int)((spark + 64) * 2);
+
+                return String.format("41 0E %02X >", A & 0xFF);
+
+            case "010D\r":
+                velocity = oscilar(velocity, 100, 0, 240);
+                return String.format("41 0D %02X >", (int) velocity);
             default:
                 return "7F 01 12 >";
         }

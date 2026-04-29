@@ -12,7 +12,7 @@ public class SparkAdvance extends Sensor{
     public double traduzirResposta() throws Exception {
         String parts[] = respostaObd().split(" ");
 
-        sparkAdvance = (Integer.parseInt(parts[2].trim(),16)/2.0) - 64 ;
+        sparkAdvance = (Integer.parseInt(parts[2].trim(),16) / 2.0) - 64 ;
 
         return sparkAdvance;
     }

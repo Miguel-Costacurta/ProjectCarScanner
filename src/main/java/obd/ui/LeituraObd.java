@@ -29,7 +29,7 @@ public class LeituraObd {
     }
 
     public void getResponse() {
-        double rpm, tps, tensao, fuelTrim,spark, velocity;
+        double rpm, tps, tensao, fuelTrim, spark, velocity;
         while (rodando) {
             try {
                 rpm = mostrarRpm.traduzirResposta();
