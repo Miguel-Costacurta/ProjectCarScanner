@@ -2,31 +2,27 @@ package obd.ui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.application.Platform;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import obd.connection.IObdConnection;
+
 import obd.core.sensors.*;
+import obd.ui.tabs.*;
+
 
 public class MainWindow {
 
     // ── dependências recebidas da ConnectWindow ───────────────
     private final Stage stage;
     private final IObdConnection obdConnection;
-
-    // ── sensores ──────────────────────────────────────────────
-    private RPM mostrarRPM;
-    private Tensao mostrarTensao;
-    private TPS mostrarTPS;
-    private FuelTrim mostrarLambda;
-    private SparkAdvance mostrarAvanco;
-    private Velocity mostrarVelocidade;
 
     // ── leitura em background ─────────────────────────────────
     private LeituraObd leituraObd;
@@ -36,18 +32,16 @@ public class MainWindow {
     private Label statusVeiculo;
 
     // ── cards de sensores ─────────────────────────────────────
-    private SensorCard cardRpm;
-    private SensorCard cardTps;
-    private SensorCard cardTensao;
-    private SensorCard cardLambda;
-    private SensorCard cardAvanco;
-    private SensorCard cardVelocidade;
+    private final SensorsTab sensorsTab;
+    private final DtcTab dtcTab;
+    private final PidsTab pidsTab;
+    private final VeiculoTab veiculoTab;
+    private final ConfigTab configTab;
 
     // ── área de conteúdo das abas ─────────────────────────────
     private StackPane contentArea;
 
     // ── aba ativa atualmente ──────────────────────────────────
-    private VBox abaAtiva;
     private Label navBtnAtivo;
 
     // ─────────────────────────────────────────────────────────
@@ -55,13 +49,11 @@ public class MainWindow {
         this.stage = stage;
         this.obdConnection = obdConnection;
 
-        // instancia sensores com a conexão recebida
-        this.mostrarRPM    = new RPM(obdConnection);
-        this.mostrarTensao = new Tensao(obdConnection);
-        this.mostrarTPS    = new TPS(obdConnection);
-        this.mostrarLambda = new FuelTrim(obdConnection, 1);
-        this.mostrarAvanco = new SparkAdvance(obdConnection);
-        this.mostrarVelocidade = new Velocity(obdConnection);
+        this.sensorsTab = new SensorsTab();
+        this.dtcTab = new DtcTab(obdConnection);
+        this.pidsTab = new PidsTab(obdConnection, sensorsTab);
+        this.veiculoTab = new VeiculoTab(obdConnection);
+        this.configTab = new ConfigTab(obdConnection, leituraObd);
     }
 
     // ── monta e exibe a janela principal ──────────────────────
@@ -120,8 +112,8 @@ public class MainWindow {
         badge.getStyleClass().add("topbar-badge");
 
         // botão desconectar
-        javafx.scene.control.Button btnDesc =
-                new javafx.scene.control.Button("DESCONECTAR");
+        Button btnDesc =
+                new Button("DESCONECTAR");
         btnDesc.getStyleClass().add("btn-desconectar");
         btnDesc.setOnAction(e -> desconectar());
 
@@ -152,11 +144,11 @@ public class MainWindow {
         Label btnConfig   = buildNavBtn("CONFIGURAÇÕES");
 
         // ação de cada botão
-        btnSensores.setOnMouseClicked(e -> mostrarAba(buildAbaSensores(), btnSensores));
-        btnDtc.setOnMouseClicked(     e -> mostrarAba(buildAbaDtc(),      btnDtc));
-        btnPids.setOnMouseClicked(    e -> mostrarAba(buildAbaPids(),      btnPids));
-        btnVeiculo.setOnMouseClicked( e -> mostrarAba(buildAbaVeiculo(),   btnVeiculo));
-        btnConfig.setOnMouseClicked(  e -> mostrarAba(buildAbaConfig(),    btnConfig));
+        btnSensores.setOnMouseClicked(e -> mostrarAba(sensorsTab.build(), btnSensores));
+        btnDtc.setOnMouseClicked(     e -> mostrarAba(dtcTab.build(),      btnDtc));
+        btnPids.setOnMouseClicked(    e -> mostrarAba(pidsTab.build(),      btnPids));
+        btnVeiculo.setOnMouseClicked( e -> mostrarAba(veiculoTab.build(),   btnVeiculo));
+        btnConfig.setOnMouseClicked(  e -> mostrarAba(configTab.build(),    btnConfig));
 
         navbar.getChildren().addAll(btnSensores, btnDtc, btnPids, btnVeiculo, btnConfig);
 
@@ -171,14 +163,13 @@ public class MainWindow {
         Label btn = new Label(texto);
         btn.getStyleClass().add("nav-btn");
         btn.setPadding(new Insets(10, 14, 10, 14));
-        btn.setCursor(javafx.scene.Cursor.HAND);
+        btn.setCursor(Cursor.HAND);
         return btn;
     }
 
     // ── troca a aba visível ───────────────────────────────────
     private void mostrarAba(VBox novaAba, Label navBtn) {
         contentArea.getChildren().setAll(novaAba);
-        abaAtiva = novaAba;
 
         // desativa todos os botões de nav
         if (navBtnAtivo != null) {
@@ -196,210 +187,9 @@ public class MainWindow {
     private StackPane buildContentArea() {
         contentArea = new StackPane();
         contentArea.setStyle("-fx-background-color: #0a0a0a;");
-        contentArea.getChildren().add(buildAbaSensores());
+        contentArea.getChildren().add(sensorsTab.build());
         return contentArea;
     }
-
-    // ════════════════════════════════════════════════════════
-    //  ABA SENSORES
-    // ════════════════════════════════════════════════════════
-    private VBox buildAbaSensores() {
-        cardRpm    = new SensorCard("RPM",    "rpm", 6800);
-        cardTps    = new SensorCard("TPS",    "%",   100);
-        cardTensao = new SensorCard("TENSÃO", "V",   14.5);
-        cardLambda = new SensorCard("LAMBDA", "λ",   1.99);
-        cardAvanco = new SensorCard("Ponto Ign","º",40);
-        cardVelocidade = new SensorCard("Velocidade", "km/h", 300);
-
-        // valores iniciais
-        cardRpm.valor.setText("--");
-        cardTps.valor.setText("--");
-        cardTensao.valor.setText("--");
-        cardLambda.valor.setText("--");
-        cardVelocidade.valor.setText("--");
-        cardAvanco.valor.setText("--");
-
-        // grid de cards
-        GridPane grid = new GridPane();
-        grid.setHgap(8);
-        grid.setVgap(8);
-        grid.setPadding(new Insets(12));
-
-        // cada card cresce igualmente
-        for (int i = 0; i < 4; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPercentWidth(25);
-            grid.getColumnConstraints().add(col);
-        }
-
-        grid.add(cardRpm.card,    0, 0);
-        grid.add(cardTps.card,    1, 0);
-        grid.add(cardTensao.card, 2, 0);
-        grid.add(cardLambda.card, 3, 0);
-        grid.add(cardAvanco.card, 3, 0);
-        grid.add(cardVelocidade.card, 3, 0);
-
-        VBox aba = new VBox(grid);
-        VBox.setVgrow(grid, Priority.ALWAYS);
-        return aba;
-    }
-
-    // ════════════════════════════════════════════════════════
-    //  ABA DTC
-    // ════════════════════════════════════════════════════════
-    private VBox buildAbaDtc() {
-        Label titulo = new Label("CÓDIGOS DE FALHA");
-        titulo.getStyleClass().add("config-title");
-        titulo.setPadding(new Insets(0, 0, 10, 0));
-
-        // botões
-        javafx.scene.control.Button btnLer =
-                new javafx.scene.control.Button("LER DTCs");
-        btnLer.getStyleClass().addAll("btn", "btn-green");
-
-        javafx.scene.control.Button btnApagar =
-                new javafx.scene.control.Button("APAGAR DTCs");
-        btnApagar.getStyleClass().addAll("btn", "btn-red");
-
-        HBox toolbar = new HBox(8, btnLer, btnApagar);
-        toolbar.setPadding(new Insets(0, 0, 10, 0));
-
-        // área de resultados
-        VBox resultados = new VBox(6);
-
-        Label vazio = new Label("PRESSIONE 'LER DTCs' PARA VERIFICAR");
-        vazio.getStyleClass().add("dtc-empty");
-        vazio.setPadding(new Insets(20));
-        resultados.getChildren().add(vazio);
-
-        // ação de ler
-        btnLer.setOnAction(e -> {
-            resultados.getChildren().clear();
-            Label lendo = new Label("LENDO...");
-            lendo.setStyle("-fx-text-fill: #1D9E75; -fx-font-family: 'Courier New'; -fx-font-size: 9px;");
-            resultados.getChildren().add(lendo);
-
-            Thread t = new Thread(() -> {
-                try {
-                    obd.core.dtcs.DtcReader reader =
-                            new obd.core.dtcs.DtcReader(obdConnection);
-                    java.util.List<String> codigos = reader.lerDtcs();
-
-                    Platform.runLater(() -> {
-                        resultados.getChildren().clear();
-                        if (codigos.isEmpty()) {
-                            Label ok = new Label("✓ NENHUM DTC ENCONTRADO");
-                            ok.getStyleClass().add("dtc-empty");
-                            ok.setStyle("-fx-text-fill: #1D9E75; -fx-font-family: 'Courier New'; -fx-font-size: 9px;");
-                            resultados.getChildren().add(ok);
-                        } else {
-                            for (String codigo : codigos) {
-                                resultados.getChildren().add(buildDtcRow(codigo));
-                            }
-                        }
-                    });
-                } catch (Exception ex) {
-                    Platform.runLater(() -> {
-                        resultados.getChildren().clear();
-                        Label erro = new Label("ERRO: " + ex.getMessage());
-                        erro.setStyle("-fx-text-fill: #E24B4A; -fx-font-family: 'Courier New'; -fx-font-size: 9px;");
-                        resultados.getChildren().add(erro);
-                    });
-                }
-            });
-            t.setDaemon(true);
-            t.start();
-        });
-
-        // ação de apagar
-        btnApagar.setOnAction(e -> {
-            Thread t = new Thread(() -> {
-                try {
-                    obdConnection.enviarComando("04\r");
-                    Platform.runLater(() -> {
-                        resultados.getChildren().clear();
-                        Label ok = new Label("✓ DTCs APAGADOS COM SUCESSO");
-                        ok.setStyle("-fx-text-fill: #1D9E75; -fx-font-family: 'Courier New'; -fx-font-size: 9px;");
-                        resultados.getChildren().add(ok);
-                    });
-                } catch (Exception ex) {
-                    System.out.println("Erro ao apagar DTCs: " + ex.getMessage());
-                }
-            });
-            t.setDaemon(true);
-            t.start();
-        });
-
-        VBox aba = new VBox(titulo, toolbar, resultados);
-        aba.setPadding(new Insets(12));
-        aba.setSpacing(0);
-        return aba;
-    }
-
-    // ── linha de DTC individual ───────────────────────────────
-    private HBox buildDtcRow(String codigo) {
-        Label codLabel = new Label(codigo);
-        codLabel.getStyleClass().add("dtc-code");
-
-        String descricao = obd.core.dtcs.DtcDescription.getDescricao(codigo);
-        Label descLabel = new Label(descricao);
-        descLabel.getStyleClass().add("dtc-desc");
-
-        Label badge = new Label("ATIVO");
-        badge.getStyleClass().add("dtc-badge");
-
-        HBox row = new HBox(12, codLabel, descLabel, badge);
-        row.getStyleClass().add("dtc-row");
-        row.setAlignment(Pos.CENTER_LEFT);
-        HBox.setHgrow(descLabel, Priority.ALWAYS);
-        return row;
-    }
-
-    // ════════════════════════════════════════════════════════
-    //  ABA PIDs ATIVOS (placeholder — será a PidsTab.java)
-    // ════════════════════════════════════════════════════════
-    private VBox buildAbaPids() {
-        Label titulo = new Label("PIDs ATIVOS");
-        titulo.getStyleClass().add("config-title");
-
-        Label info = new Label("IMPLEMENTE A PidsTab.java AQUI");
-        info.setStyle("-fx-text-fill: #444; -fx-font-family: 'Courier New'; -fx-font-size: 10px;");
-
-        VBox aba = new VBox(12, titulo, info);
-        aba.setPadding(new Insets(12));
-        return aba;
-    }
-
-    // ════════════════════════════════════════════════════════
-    //  ABA VEÍCULO (placeholder — será a VeiculoTab.java)
-    // ════════════════════════════════════════════════════════
-    private VBox buildAbaVeiculo() {
-        Label titulo = new Label("IDENTIFICAÇÃO DO VEÍCULO");
-        titulo.getStyleClass().add("config-title");
-
-        Label info = new Label("IMPLEMENTE A VeiculoTab.java AQUI");
-        info.setStyle("-fx-text-fill: #444; -fx-font-family: 'Courier New'; -fx-font-size: 10px;");
-
-        VBox aba = new VBox(12, titulo, info);
-        aba.setPadding(new Insets(12));
-        return aba;
-    }
-
-    // ════════════════════════════════════════════════════════
-    //  ABA CONFIGURAÇÕES (placeholder — será a ConfigTab.java)
-    // ════════════════════════════════════════════════════════
-    private VBox buildAbaConfig() {
-        Label titulo = new Label("CONFIGURAÇÕES");
-        titulo.getStyleClass().add("config-title");
-
-        Label info = new Label("IMPLEMENTE A ConfigTab.java AQUI");
-        info.setStyle("-fx-text-fill: #444; -fx-font-family: 'Courier New'; -fx-font-size: 10px;");
-
-        VBox aba = new VBox(12, titulo, info);
-        aba.setPadding(new Insets(12));
-        return aba;
-    }
-
     // ── barra de status inferior ──────────────────────────────
     private HBox buildStatusBar() {
         HBox bar = new HBox(20);
@@ -434,49 +224,10 @@ public class MainWindow {
     // ════════════════════════════════════════════════════════
     //  LEITURA OBD EM BACKGROUND
     // ════════════════════════════════════════════════════════
-    private void iniciarLeitura() {
-        leituraObd = new LeituraObd(
-                obdConnection,
-                mostrarTPS,
-                mostrarRPM,
-                mostrarLambda,
-                mostrarTensao,
-                mostrarAvanco,
-                mostrarVelocidade,
-                (rpm, tps, tensao, fuelTrim, spark, velocity) -> Platform.runLater(() -> {
-                    // atualiza cards
-                    cardRpm.valor.setText(String.format("%.0f", rpm));
-                    cardRpm.barra.setPrefWidth(
-                            cardRpm.card.getWidth() * (rpm / cardRpm.valorMax));
-
-                    cardTps.valor.setText(String.format("%.1f", tps));
-                    cardTps.barra.setPrefWidth(
-                            cardTps.card.getWidth() * (tps / cardTps.valorMax));
-
-                    cardTensao.valor.setText(String.format("%.1f", tensao));
-                    cardTensao.barra.setPrefWidth(
-                            cardTensao.card.getWidth() * (tensao / cardTensao.valorMax));
-
-                    cardLambda.valor.setText(String.format("%.2f", fuelTrim));
-                    cardLambda.barra.setPrefWidth(
-                            cardLambda.card.getWidth() * (fuelTrim / cardLambda.valorMax));
-
-                    cardLambda.valor.setText(String.format("%.0f", velocity));
-                    cardLambda.barra.setPrefWidth(
-                            cardLambda.card.getWidth() * (velocity / cardLambda.valorMax));
-
-                    cardLambda.valor.setText(String.format("%.0f", spark));
-                    cardLambda.barra.setPrefWidth(
-                            cardLambda.card.getWidth() * (spark / cardLambda.valorMax)
-                    );
-                    // alerta visual no card lambda (fora de 0.90 ~ 1.10)
-                    boolean lambdaAlerta = fuelTrim < 0.90 || fuelTrim > 1.10;
-                    cardLambda.card.getStyleClass().removeAll("sensor-card-warn");
-                    if (lambdaAlerta) cardLambda.card.getStyleClass().add("sensor-card-warn");
-                })
-        );
-
+    private void iniciarLeitura(){
+        leituraObd = new LeituraObd(obdConnection,sensorsTab);
         Thread thread = new Thread(leituraObd::getResponse);
+        configTab.setLeituraObd(leituraObd);
         thread.setDaemon(true);
         thread.start();
     }
