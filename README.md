@@ -52,7 +52,7 @@ Execute o projeto
 mvn javafx:run
 
 ---
-##🚘 Como Utilizar
+## 🚘 Como Utilizar
 Conecte o adaptador OBD2 ao veículo
 Conecte via:
 Cabo USB/Serial
@@ -127,7 +127,7 @@ src/
  │    └── resources/
  │          └── style.css
 ```
-##🧩 Organização dos Módulos
+## 🧩 Organização dos Módulos
 🔌 connection/
 Responsável pela comunicação com dispositivos OBD2 e ELM327.
 
