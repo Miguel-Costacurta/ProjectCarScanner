@@ -5,12 +5,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import obd.connection.IObdConnection;
-import obd.core.sensors.LeituraObd;
+import obd.core.sensors.ObdReader;
 
 public class ConfigTab {
 
     private final IObdConnection obdConnection;
-    private volatile LeituraObd leituraObd;
+    private volatile ObdReader leituraObd;
 
     // ── referências para leitura/escrita dos valores ──────────
     private Label valorPorta;
@@ -24,7 +24,7 @@ public class ConfigTab {
     private Label statusElm;
 
     // ─────────────────────────────────────────────────────────
-    public ConfigTab(IObdConnection obdConnection, LeituraObd leituraObd) {
+    public ConfigTab(IObdConnection obdConnection, ObdReader leituraObd) {
         this.obdConnection = obdConnection;
         this.leituraObd    = leituraObd;
     }
@@ -37,7 +37,6 @@ public class ConfigTab {
         aba.getChildren().addAll(
                 buildSecaoConexao(),
                 buildSecaoLeitura(),
-                buildSecaoSensores(),
                 buildSecaoElm()
         );
 
@@ -71,7 +70,7 @@ public class ConfigTab {
         return buildSecao(titulo, campos);
     }
 
-    public void setLeituraObd(LeituraObd leituraObd){
+    public void setLeituraObd(ObdReader leituraObd){
         this.leituraObd = leituraObd;
     }
 
@@ -109,40 +108,6 @@ public class ConfigTab {
 
         VBox campos = new VBox(8, buildInfoRow("INTERVALO", row), dica);
 
-        return buildSecao(titulo, campos);
-    }
-
-    // ════════════════════════════════════════════════════════
-    //  SEÇÃO 3 — sensores ativos
-    // ════════════════════════════════════════════════════════
-    private VBox buildSecaoSensores() {
-        Label titulo = new Label("SENSORES ATIVOS");
-        titulo.getStyleClass().add("config-title");
-
-        cbRpm       = buildCheckbox("RPM",        true);
-        cbTps       = buildCheckbox("TPS",        true);
-        cbTensao    = buildCheckbox("TENSÃO",     true);
-        cbLambda    = buildCheckbox("LAMBDA",     true);
-        cbAvanco    = buildCheckbox("AVANÇO IGN.", true);
-        cbVelocidade= buildCheckbox("VELOCIDADE", true);
-
-        Label dica = new Label("DESATIVE SENSORES NÃO SUPORTADOS PARA MELHORAR A VELOCIDADE");
-        dica.setStyle(
-                "-fx-font-family: 'Courier New'; -fx-font-size: 7px; " +
-                        "-fx-text-fill: #333333; -fx-letter-spacing: 0.08em;"
-        );
-
-        GridPane grid = new GridPane();
-        grid.setHgap(24);
-        grid.setVgap(6);
-        grid.add(cbRpm,        0, 0);
-        grid.add(cbTps,        1, 0);
-        grid.add(cbTensao,     2, 0);
-        grid.add(cbLambda,     0, 1);
-        grid.add(cbAvanco,     1, 1);
-        grid.add(cbVelocidade, 2, 1);
-
-        VBox campos = new VBox(8, grid, dica);
         return buildSecao(titulo, campos);
     }
 
@@ -216,17 +181,6 @@ public class ConfigTab {
         t.setDaemon(true);
         t.start();
     }
-
-    // ════════════════════════════════════════════════════════
-    //  GETTERS — MainWindow consulta quais sensores estão ativos
-    // ════════════════════════════════════════════════════════
-    public boolean isRpmAtivo()        { return cbRpm.isSelected(); }
-    public boolean isTpsAtivo()        { return cbTps.isSelected(); }
-    public boolean isTensaoAtivo()     { return cbTensao.isSelected(); }
-    public boolean isLambdaAtivo()     { return cbLambda.isSelected(); }
-    public boolean isAvancoAtivo()     { return cbAvanco.isSelected(); }
-    public boolean isVelocidadeAtivo() { return cbVelocidade.isSelected(); }
-
     // ════════════════════════════════════════════════════════
     //  HELPERS
     // ════════════════════════════════════════════════════════
@@ -256,7 +210,7 @@ public class ConfigTab {
         );
         return row;
     }
-
+/*
     private CheckBox buildCheckbox(String texto, boolean selecionado) {
         CheckBox cb = new CheckBox(texto);
         cb.setSelected(selecionado);
@@ -265,6 +219,6 @@ public class ConfigTab {
                         "-fx-text-fill: #888888;"
         );
         return cb;
-    }
+    } */
 
 }

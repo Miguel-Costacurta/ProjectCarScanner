@@ -8,9 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import obd.connection.IObdConnection;
-import obd.core.sensors.SensorAtivo;
+import obd.core.sensors.ActiveSensor;
 import obd.core.pids.PidConverter;
-import obd.core.pids.PidDescription;
+import obd.core.pids.EPidDescription;
 import obd.core.pids.PidScanner;
 
 import java.util.HashMap;
@@ -140,7 +140,7 @@ public class PidsTab {
                         "-fx-text-fill: #1D9E75; -fx-min-width: 32px;"
         );
 
-        Label descLabel = new Label(PidDescription.getDescricao(pid));
+        Label descLabel = new Label(EPidDescription.getDescricao(pid));
         descLabel.setStyle(
                 "-fx-font-family: 'Courier New'; -fx-font-size: 9px; -fx-text-fill: #888888;"
         );
@@ -160,8 +160,8 @@ public class PidsTab {
             if (ativo[0]) {
                 // monta o SensorAtivo e envia para SensorsTab
                 Object[] config = CONFIG_PIDS.getOrDefault(pid,
-                        new Object[]{"", 100, PidDescription.getDescricao(pid), PidConverter.PERCENTUAL});
-                SensorAtivo sensor = new SensorAtivo(
+                        new Object[]{"", 100, EPidDescription.getDescricao(pid), PidConverter.PERCENTUAL});
+                ActiveSensor sensor = new ActiveSensor(
                         pid,
                         (String) config[2],
                         (String) config[0],

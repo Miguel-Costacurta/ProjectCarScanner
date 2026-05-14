@@ -3,7 +3,7 @@ package obd.core.pids;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum PidDescription {
+public enum EPidDescription {
 
     PID_01("01", "Status dos monitores desde limpeza de DTCs"),
     PID_02("02", "DTC que ativou o MIL"),
@@ -95,15 +95,15 @@ public enum PidDescription {
     private final String codigo;
     private final String descricao;
 
-    private static final Map<String, PidDescription> lookup = new HashMap<>();
+    private static final Map<String, EPidDescription> lookup = new HashMap<>();
 
     static {
-        for (PidDescription p : values()) {
+        for (EPidDescription p : values()) {
             lookup.put(p.codigo.toUpperCase(), p);
         }
     }
 
-    PidDescription(String codigo, String descricao) {
+    EPidDescription(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
@@ -112,7 +112,7 @@ public enum PidDescription {
     public String getDescricao() { return descricao; }
 
     public static String getDescricao(String pid) {
-        PidDescription p = lookup.get(pid.toUpperCase());
+        EPidDescription p = lookup.get(pid.toUpperCase());
         return p != null ? p.descricao : "Descrição não disponível";
     }
 }

@@ -6,7 +6,7 @@ import obd.ui.tabs.SensorsTab;
 
 import java.util.Map;
 
-public class LeituraObd {
+public class ObdReader {
 
     private final IObdConnection obdConnection;
     private final SensorsTab sensorsTab;
@@ -15,7 +15,7 @@ public class LeituraObd {
     private volatile int     intervalo = 50;
 
     // ─────────────────────────────────────────────────────────
-    public LeituraObd(IObdConnection obdConnection, SensorsTab sensorsTab) {
+    public ObdReader(IObdConnection obdConnection, SensorsTab sensorsTab) {
         this.obdConnection = obdConnection;
         this.sensorsTab    = sensorsTab;
     }
@@ -23,14 +23,14 @@ public class LeituraObd {
     // ── loop principal de leitura ─────────────────────────────
     public void getResponse() {
         while (rodando) {
-            Map<String, SensorAtivo> ativos = sensorsTab.getSensoresAtivos();
+            Map<String, ActiveSensor> ativos = sensorsTab.getSensoresAtivos();
 
             if (ativos.isEmpty()) {
                 try { Thread.sleep(200); } catch (InterruptedException ignored) {}
                 continue;
             }
 
-            for (SensorAtivo sensor : ativos.values()) {
+            for (ActiveSensor sensor : ativos.values()) {
                 if (!rodando) break;
 
                 try {

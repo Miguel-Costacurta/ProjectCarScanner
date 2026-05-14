@@ -19,7 +19,7 @@ public class MainWindow {
     private final IObdConnection obdConnection;
 
     // ── leitura em background ─────────────────────────────────
-    private LeituraObd leituraObd;
+    private ObdReader leituraObd;
 
     // ── cards de sensores ─────────────────────────────────────
     private final SensorsTab sensorsTab;
@@ -82,7 +82,7 @@ public class MainWindow {
     //  LEITURA OBD EM BACKGROUND
     // ════════════════════════════════════════════════════════
     private void iniciarLeituraObd(){
-        leituraObd = new LeituraObd(obdConnection,sensorsTab);
+        leituraObd = new ObdReader(obdConnection,sensorsTab);
         Thread thread = new Thread(leituraObd::getResponse);
         configTab.setLeituraObd(leituraObd);
         thread.setDaemon(true);

@@ -4,7 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import java.util.function.Function;
 
-public class SensorAtivo {
+public class ActiveSensor {
     public final String pid;
     public final String nome;
     public final String unidade;
@@ -19,8 +19,8 @@ public class SensorAtivo {
     public Pane  barra;
     public double larguraCard;
 
-    public SensorAtivo(String pid, String nome, String unidade,
-                       double valorMax, Function<String[], Double> conversor) {
+    public ActiveSensor(String pid, String nome, String unidade,
+                        double valorMax, Function<String[], Double> conversor) {
         this.pid       = pid;
         this.nome      = nome;
         this.unidade   = unidade;

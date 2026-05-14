@@ -75,7 +75,7 @@ public class ConnectWindow {
 
     // ── cabeçalho com logo e subtítulo ────────────────────────
     private VBox buildHeader() {
-        Label logo = new Label("PROJECTCARSCANNER");
+        Label logo = new Label("CAR SCANNER");
         logo.getStyleClass().add("conn-logo");
 
         Label sub = new Label("DIAGNÓSTICO AUTOMOTIVO OBD-II");

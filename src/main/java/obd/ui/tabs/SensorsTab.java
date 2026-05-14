@@ -4,7 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import obd.core.sensors.SensorAtivo;
+import obd.core.sensors.ActiveSensor;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SensorsTab {
 
     // ── sensores ativos: PID → SensorAtivo ───────────────────
-    private final Map<String, SensorAtivo> sensoresAtivos = new ConcurrentHashMap<>();
+    private final Map<String, ActiveSensor> sensoresAtivos = new ConcurrentHashMap<>();
 
     // ── grid dinâmico onde os cards aparecem ──────────────────
     private GridPane grid;
@@ -56,7 +56,7 @@ public class SensorsTab {
     }
 
     // ── chamado pela PidsTab ao ativar um sensor ──────────────
-    public void adicionarSensor(SensorAtivo sensor) {
+    public void adicionarSensor(ActiveSensor sensor) {
         if (sensoresAtivos.containsKey(sensor.pid)) return;
         sensoresAtivos.put(sensor.pid, sensor);
         if (grid != null) redesenharGrid();
@@ -72,7 +72,7 @@ public class SensorsTab {
     private void redesenharGrid() {
         grid.getChildren().clear();
         int i = 0;
-        for (SensorAtivo s : sensoresAtivos.values()) {
+        for (ActiveSensor s : sensoresAtivos.values()) {
             VBox card = buildCard(s);
             grid.add(card, i % 3, i / 3);
             i++;
@@ -80,7 +80,7 @@ public class SensorsTab {
     }
 
     // ── constrói o card visual de um sensor ───────────────────
-    private VBox buildCard(SensorAtivo sensor) {
+    private VBox buildCard(ActiveSensor sensor) {
         Label nomeLabel = new Label(sensor.nome.toUpperCase());
         nomeLabel.setStyle(
                 "-fx-font-family: 'Courier New'; -fx-font-size: 8px; " +
@@ -144,7 +144,7 @@ public class SensorsTab {
 
     // ── atualiza o valor de um sensor específico ──────────────
     public void atualizarSensor(String pid, double valor) {
-        SensorAtivo s = sensoresAtivos.get(pid);
+        ActiveSensor s = sensoresAtivos.get(pid);
         if (s == null || s.valorLabel == null) return;
 
         s.valorLabel.setText(String.format("%.1f", valor));
@@ -156,7 +156,7 @@ public class SensorsTab {
     }
 
     // ── retorna os sensores ativos para o LeituraObd ──────────
-    public Map<String, SensorAtivo> getSensoresAtivos() {
+    public Map<String, ActiveSensor> getSensoresAtivos() {
         return sensoresAtivos;
     }
 }

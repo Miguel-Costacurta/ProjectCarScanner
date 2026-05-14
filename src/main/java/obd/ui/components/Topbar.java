@@ -26,7 +26,7 @@ public class Topbar {
     // ── barra superior: logo, veículo, badge, desconectar ─────
     public HBox buildTopbar() {
         // logo
-        Label logo = new Label("PROJECTCARSCANNER");
+        Label logo = new Label("CAR SCANNER");
         logo.getStyleClass().add("topbar-logo");
 
         // status do veículo no centro
