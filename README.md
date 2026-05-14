@@ -180,21 +180,11 @@ Janelas principais da aplicação.
 
 Compatível com veículos que possuem suporte ao protocolo OBD2.
 ---
-## 📄 Licença
+## License
 
-Este projeto está licenciado sob a licença:
+This project is licensed under the PolyForm Noncommercial License 1.0.0.
 
-Creative Commons BY-NC-ND 4.0
-
-Isso significa que:
-
-✅ Pode visualizar e estudar o código
-❌ Não pode revender
-❌ Não pode modificar e redistribuir
-❌ Não pode clonar/comercializar o projeto
-
-Mais informações:
-https://creativecommons.org/licenses/by-nc-nd/4.0/
+Commercial use is prohibited without explicit permission from the author.
 ---
 ## 👨‍💻 Autor
 
