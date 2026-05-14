@@ -1,5 +1,9 @@
 # 🚗 Scanner Automotivo OBD2
 
+![Java](https://img.shields.io/badge/Java-17-orange)
+![JavaFX](https://img.shields.io/badge/JavaFX-21-blue)
+![License](https://img.shields.io/badge/License-Noncommercial-red)
+
 Um scanner automotivo desenvolvido em Java + JavaFX com suporte para conexão via cabo OBD2 USB/Serial e dispositivos ELM327 Bluetooth.
 
 O sistema permite realizar leitura de sensores em tempo real, escanear PIDs suportados pelo veículo, visualizar e apagar códigos de falha (DTC), além de cadastrar veículos para organização dos diagnósticos.
@@ -178,7 +182,15 @@ Janelas principais da aplicação.
 
 ## ⚠️ Compatibilidade
 
+✅ Testado com ELM327 v2.1 Bluetooth
+✅ Testado com cabo OBD2 USB/Serial
+⚠️  ELM327 v1.5 — funcionalidade parcial
+
 Compatível com veículos que possuem suporte ao protocolo OBD2.
+
+## 🗺️ Roadmap
+No futuro do projeto, pretendo implementar também um cadastro do veículo que apresente os antigos erros registrados dele e também logs, sendo possível medição de 0-100, 201m... e também verificações de sensores por meio dos logs.
+
 ---
 ## License
 
