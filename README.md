@@ -43,7 +43,7 @@ Java JDK 17+
 Maven 3.8+
 
 Clone o projeto
-git clone https://github.com/seu-usuario/seu-repositorio.git
+git clone [https://github.com/miguel-costacurta/projectcarscanner](https://github.com/Miguel-Costacurta/ProjectCarScanner)
 
 Entre na pasta
 cd seu-repositorio
@@ -52,7 +52,7 @@ Execute o projeto
 mvn javafx:run
 
 ---
-🚘 Como Utilizar
+##🚘 Como Utilizar
 Conecte o adaptador OBD2 ao veículo
 Conecte via:
 Cabo USB/Serial
@@ -75,8 +75,6 @@ Utilize as funções de leitura/apagamento de DTC quando necessário
 <img width="895" height="592" alt="image" src="https://github.com/user-attachments/assets/85f5a935-44c4-41d4-bd56-d0619a3d2c5b" />
 
 <img width="895" height="560" alt="image" src="https://github.com/user-attachments/assets/2ece2650-f949-4637-b6c9-3c1e25927c0c" />
-
-Exemplo:
 
 ## 📁 Estrutura do Projeto
 
@@ -129,7 +127,7 @@ src/
  │    └── resources/
  │          └── style.css
 ```
-🧩 Organização dos Módulos
+##🧩 Organização dos Módulos
 🔌 connection/
 Responsável pela comunicação com dispositivos OBD2 e ELM327.
 
@@ -194,9 +192,9 @@ No futuro do projeto, pretendo implementar também um cadastro do veículo que a
 ---
 ## License
 
-This project is licensed under the PolyForm Noncommercial License 1.0.0.
+Esse projeto é licenciado por PolyForm Noncommercial License 1.0.0.
 
-Commercial use is prohibited without explicit permission from the author.
+O uso para fins comerciais é estritamente proibido sem autorização prévia do autor.
 ---
 ## 👨‍💻 Autor
 
