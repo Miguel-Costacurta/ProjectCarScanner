@@ -18,7 +18,7 @@ public class DtcReader {
         resposta = resposta.replace(">", "").trim();
 
         if (resposta.equals("UNSUPPORTED") || resposta.contains("NO DATA") || resposta.isBlank()) {
-            return codigos; // lista vazia = sem erros
+            return codigos;
         }
 
         String[] bytes = resposta.split(" ");

@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import obd.connection.IObdConnection;
-import obd.core.SensorAtivo;
+import obd.core.sensors.SensorAtivo;
 import obd.core.pids.PidConverter;
 import obd.core.pids.PidDescription;
 import obd.core.pids.PidScanner;
@@ -105,7 +105,7 @@ public class PidsTab {
         Thread t = new Thread(() -> {
             try {
                 PidScanner scanner = new PidScanner(obdConnection);
-                List<String> pids  = scanner.scanear();
+                List<String> pids  = scanner.scanearPids();
 
                 Platform.runLater(() -> {
                     listaPids.getChildren().clear();

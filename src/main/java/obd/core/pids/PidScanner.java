@@ -12,7 +12,7 @@ public class PidScanner {
         this.iObdConnection = iObdConnection;
     }
 
-    public List<String> scanear()throws Exception{
+    public List<String> scanearPids()throws Exception{
         List<String> pids = new ArrayList<>();
 
         String[] ranges = {"0100\r", "0120\r", "0140\r"};

@@ -1,4 +1,4 @@
-package obd.ui;
+package obd.ui.windows;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -44,7 +44,7 @@ public class MainWindow {
     }
 
     // ── monta e exibe a janela principal ──────────────────────
-    public void show() {
+    public void showMainWindow() {
         BorderPane root = new BorderPane();
         Topbar topbar = new Topbar(obdConnection, this::desconectar);
         Navbar navbar = new Navbar(
@@ -74,14 +74,14 @@ public class MainWindow {
 
         stage.show();
 
-        iniciarLeitura();
+        iniciarLeituraObd();
         topbar.iniciarAnimacaoLive();
     }
 
     // ════════════════════════════════════════════════════════
     //  LEITURA OBD EM BACKGROUND
     // ════════════════════════════════════════════════════════
-    private void iniciarLeitura(){
+    private void iniciarLeituraObd(){
         leituraObd = new LeituraObd(obdConnection,sensorsTab);
         Thread thread = new Thread(leituraObd::getResponse);
         configTab.setLeituraObd(leituraObd);

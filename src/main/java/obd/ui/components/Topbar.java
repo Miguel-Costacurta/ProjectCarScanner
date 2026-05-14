@@ -10,7 +10,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.util.Duration;
 import obd.connection.IObdConnection;
-import obd.ui.MainWindow;
 
 public class Topbar {
     private final Runnable onDesconectar;

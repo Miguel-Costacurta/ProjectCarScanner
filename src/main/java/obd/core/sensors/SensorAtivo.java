@@ -1,4 +1,4 @@
-package obd.core;
+package obd.core.sensors;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;

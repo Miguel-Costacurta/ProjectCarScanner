@@ -4,7 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import obd.core.SensorAtivo;
+import obd.core.sensors.SensorAtivo;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

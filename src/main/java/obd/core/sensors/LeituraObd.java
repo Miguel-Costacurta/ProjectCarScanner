@@ -1,8 +1,7 @@
-package obd.ui;
+package obd.core.sensors;
 
 import javafx.application.Platform;
 import obd.connection.IObdConnection;
-import obd.core.SensorAtivo;
 import obd.ui.tabs.SensorsTab;
 
 import java.util.Map;

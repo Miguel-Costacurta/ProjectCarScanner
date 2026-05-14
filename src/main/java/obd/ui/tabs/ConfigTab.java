@@ -5,8 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import obd.connection.IObdConnection;
-import obd.connection.ObdConnection;
-import obd.ui.LeituraObd;
+import obd.core.sensors.LeituraObd;
 
 public class ConfigTab {
 

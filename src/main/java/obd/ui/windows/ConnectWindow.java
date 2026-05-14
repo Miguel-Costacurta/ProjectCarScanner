@@ -1,4 +1,4 @@
-package obd.ui;
+package obd.ui.windows;
 
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.animation.FadeTransition;
@@ -274,7 +274,7 @@ public class ConnectWindow {
     // ── abre a janela principal depois de conectar ────────────
     private void iniciarApp(IObdConnection obdConnection) {
         MainWindow mainWindow = new MainWindow(stage,obdConnection);
-        mainWindow.show();
+        mainWindow.showMainWindow();
     }
 
     // ── utilitário para atualizar o label de status ───────────
