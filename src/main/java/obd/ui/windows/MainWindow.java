@@ -6,10 +6,15 @@ import javafx.stage.Stage;
 import obd.connection.IObdConnection;
 
 import obd.core.sensors.*;
+import obd.database.DatabaseManager;
+import obd.database.daos.SessaoDao;
+import obd.database.models.Sessao;
 import obd.ui.components.Navbar;
 import obd.ui.components.StatusBar;
 import obd.ui.components.Topbar;
 import obd.ui.tabs.*;
+
+import java.time.LocalDateTime;
 
 
 public class MainWindow {
@@ -17,6 +22,7 @@ public class MainWindow {
     // ── dependências recebidas da ConnectWindow ───────────────
     private final Stage stage;
     private final IObdConnection obdConnection;
+    private int sessaoAtiva = -1;
 
     // ── leitura em background ─────────────────────────────────
     private ObdReader leituraObd;
@@ -46,7 +52,10 @@ public class MainWindow {
     // ── monta e exibe a janela principal ──────────────────────
     public void showMainWindow() {
         BorderPane root = new BorderPane();
-        Topbar topbar = new Topbar(obdConnection, this::desconectar);
+        Topbar topbar = new Topbar(obdConnection,
+                                    this::desconectar,
+                                    this::iniciarGravacao,
+                                    this::pararGravacao);
         Navbar navbar = new Navbar(
                 aba -> contentArea.getChildren().setAll(aba),
                 sensorsTab, dtcTab, pidsTab, veiculoTab, configTab
@@ -95,6 +104,38 @@ public class MainWindow {
         if (leituraObd != null) leituraObd.stop();
         obdConnection.closeConnection();
         new ConnectWindow(stage).show();
+        DatabaseManager.fechar();
+    }
+
+    private void iniciarGravacao() {
+        Thread t = new Thread(() -> {
+            try {
+                Sessao sessao = new Sessao(0, "Gravação " + LocalDateTime.now());
+                new SessaoDao().salvar(sessao);
+                sessaoAtiva = sessao.getId();
+                leituraObd.iniciarGravacao(sessao.getId());
+            } catch (Exception e) {
+                System.out.println("Erro ao criar sessão: " + e.getMessage());
+            }
+        });
+        t.setDaemon(true);
+        t.start();
+    }
+
+    private void pararGravacao() {
+        Thread t = new Thread(() -> {
+            try {
+                leituraObd.pararGravacao();
+                if (sessaoAtiva >0){
+                    new SessaoDao().finalizarSessao(sessaoAtiva);
+                    sessaoAtiva = -1;
+                }
+            } catch (Exception e) {
+                System.out.println("Erro ao parar gravação: " + e.getMessage());
+            }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     // ── área central que troca de conteúdo ───────────────────

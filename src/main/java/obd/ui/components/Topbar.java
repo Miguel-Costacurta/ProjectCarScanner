@@ -14,13 +14,20 @@ import obd.connection.IObdConnection;
 public class Topbar {
     private final Runnable onDesconectar;
     private final IObdConnection obdConnection;
+    private final Runnable onIniciarGravacao;
+    private final Runnable onPararGravacao;
 
     private Label liveDot;
-    private Label statusVeiculo;
+    private Timeline blinkGravacao;
+    private Button btnRec;
+    private boolean gravando = false;
 
-    public Topbar(IObdConnection obdConnection, Runnable onDesconectar){
+
+    public Topbar(IObdConnection obdConnection, Runnable onDesconectar, Runnable onIniciarGravacao, Runnable onPararGravacao){
         this.obdConnection = obdConnection;
         this.onDesconectar = onDesconectar;
+        this.onIniciarGravacao = onIniciarGravacao;
+        this.onPararGravacao = onPararGravacao;
     }
 
     // ── barra superior: logo, veículo, badge, desconectar ─────
@@ -32,12 +39,17 @@ public class Topbar {
         // status do veículo no centro
         liveDot = new Label("● ");
         liveDot.setStyle("-fx-text-fill: #1D9E75; -fx-font-size: 9px;");
-        statusVeiculo = new Label("CONECTADO — " + obdConnection.getPortName());
+
+        Label statusVeiculo = new Label("CONECTADO — " + obdConnection.getPortName());
         statusVeiculo.getStyleClass().add("topbar-veiculo");
 
         HBox centro = new HBox(4, liveDot, statusVeiculo);
         centro.setAlignment(Pos.CENTER);
         HBox.setHgrow(centro, Priority.ALWAYS);
+
+        btnRec = new Button("● GRAVAR");
+        btnRec.setStyle(estiloRec(false));
+        btnRec.setOnAction(e-> toggleGravacao());
 
         // badge de conexão
         Label badge = new Label("📡 " + obdConnection.getPortName());
@@ -49,7 +61,7 @@ public class Topbar {
         btnDesc.getStyleClass().add("btn-desconectar");
         btnDesc.setOnAction(e -> onDesconectar.run());
 
-        HBox topbar = new HBox(12, logo, centro, badge, btnDesc);
+        HBox topbar = new HBox(12, logo, centro, btnRec, badge, btnDesc);
         topbar.setAlignment(Pos.CENTER_LEFT);
         topbar.setPadding(new Insets(7, 14, 7, 14));
         topbar.setStyle(
@@ -69,6 +81,50 @@ public class Topbar {
         );
         blink.setCycleCount(Timeline.INDEFINITE);
         blink.play();
+    }
+
+    private void toggleGravacao() {
+        gravando = !gravando;
+
+        if (gravando) {
+            btnRec.setStyle(estiloRec(true));
+            btnRec.setText("■ PARAR");
+            onIniciarGravacao.run();
+            iniciarBlinkRec();
+        } else {
+            btnRec.setStyle(estiloRec(false));
+            btnRec.setText("● GRAVAR");
+            onPararGravacao.run();
+            pararBlinkRec();
+        }
+    }
+
+    private void iniciarBlinkRec() {
+        blinkGravacao = new Timeline(
+                new KeyFrame(Duration.millis(0),    e -> btnRec.setOpacity(1.0)),
+                new KeyFrame(Duration.millis(500),  e -> btnRec.setOpacity(0.3)),
+                new KeyFrame(Duration.millis(1000), e -> btnRec.setOpacity(1.0))
+        );
+        blinkGravacao.setCycleCount(Timeline.INDEFINITE);
+        blinkGravacao.play();
+    }
+
+    private void pararBlinkRec() {
+        if (blinkGravacao != null) {
+            blinkGravacao.stop();
+            btnRec.setOpacity(1.0);
+        }
+    }
+
+    private String estiloRec(boolean gravando) {
+        String cor   = gravando ? "#E24B4A" : "#1D9E75";
+        String fundo = gravando ? "#1a0a0a" : "transparent";
+        return "-fx-background-color: " + fundo + "; " +
+                "-fx-border-color: " + cor + "; -fx-border-width: 1px; " +
+                "-fx-border-radius: 2px; -fx-background-radius: 2px; " +
+                "-fx-text-fill: " + cor + "; -fx-font-family: 'Courier New'; " +
+                "-fx-font-size: 8px; -fx-padding: 4 10 4 10; " +
+                "-fx-letter-spacing: 0.12em; -fx-cursor: hand;";
     }
 
 }
