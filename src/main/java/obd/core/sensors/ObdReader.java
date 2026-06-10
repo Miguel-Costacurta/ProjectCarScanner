@@ -2,6 +2,7 @@ package obd.core.sensors;
 
 import javafx.application.Platform;
 import obd.connection.IObdConnection;
+import obd.core.pids.ElmParser;
 import obd.database.daos.LeituraDao;
 import obd.database.models.Leitura;
 import obd.ui.tabs.SensorsTab;
@@ -9,17 +10,22 @@ import obd.ui.tabs.SensorsTab;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ObdReader {
 
     private final IObdConnection obdConnection;
     private final SensorsTab sensorsTab;
     private final LeituraDao leituraDao = new LeituraDao();
+    private final Map<String, Double> ultimosValores = new ConcurrentHashMap<>();
+    private volatile long ultimaAtualizacaoUi = 0;
+
+    private static final long UI_INTERVAL_NS = 50_000_000L;
 
     private volatile boolean rodando   = true;
-    private volatile int     intervalo = 50;
+    private volatile int     intervalo = 0;
 
-    private volatile boolean gravando = true;
+    private volatile boolean gravando = false;
     private volatile int sessaoAtiva = -1;
     private final List<Leitura> buffer = new ArrayList<>();
     private static final int BUFFER_SIZE = 20;
@@ -40,7 +46,7 @@ public class ObdReader {
                 continue;
             }
 
-            for (ActiveSensor sensor : ativos.values()) {
+            for (ActiveSensor sensor : new ArrayList<>(ativos.values())) {
                 if (!rodando) break;
 
                 try {
@@ -50,14 +56,13 @@ public class ObdReader {
                     if (resposta.startsWith("7F") || resposta.contains("NO DATA")
                             || resposta.isBlank()) continue;
 
-                    String[] partes = resposta.split(" ");
-                    if (partes.length < 3) continue;
+                    String[] partes = ElmParser.extrairResposta41(resposta, sensor.pid);
+
+                    if(partes.length < 3) continue;
 
                     double valor = sensor.conversor.apply(partes);
 
-                    Platform.runLater(() ->
-                            sensorsTab.atualizarSensor(sensor.pid, valor)
-                    );
+                    publicarValor(sensor.pid, valor);
 
                     if(gravando && sessaoAtiva > 0){
                         synchronized (buffer) {
@@ -72,11 +77,33 @@ public class ObdReader {
                     System.out.println("Erro lendo PID " + sensor.pid + ": " + e.getMessage());
                 }
             }
-
-            try { Thread.sleep(intervalo); } catch (InterruptedException ignored) {}
+            if(intervalo > 0){
+                try {
+                    Thread.sleep(intervalo);
+                } catch (InterruptedException ignored) {}
+            }
         }
     }
 
+    private void publicarValor(String pid, double valor) {
+        ultimosValores.put(pid, valor);
+
+        long agora = System.nanoTime();
+
+        if (agora - ultimaAtualizacaoUi < UI_INTERVAL_NS) {
+            return;
+        }
+
+        ultimaAtualizacaoUi = agora;
+
+        Map<String, Double> snapshot = new ConcurrentHashMap<>(ultimosValores);
+
+        Platform.runLater(() -> {
+            for (Map.Entry<String, Double> e : snapshot.entrySet()) {
+                sensorsTab.atualizarSensor(e.getKey(), e.getValue());
+            }
+        });
+    }
     public void iniciarGravacao(int sessaoId){
         synchronized (buffer) {buffer.clear();}
         this.sessaoAtiva = sessaoId;
